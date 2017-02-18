@@ -1,0 +1,54 @@
+			// $( ".feature_item__annotation--truncated" ).each(function( index ) {
+			// //console.log( index + ": " + $( this ).text() );
+			// var d = $(this).text().trim();
+			// obj.text.push({summary : d});
+			// });
+			
+
+//var d = $(this).html();
+				//obj.text.push({summary : d});
+				
+
+				// $( ".feature_item__annotation--truncated" ).each(function( index ) {
+				// //console.log( index + ": " + $( this ).text() );
+				// var d = $(this).text().trim();
+				// obj.text.push({summary : d});
+				// });
+				
+
+			//var prettyData = html.prettyPrint(text);
+			//console.log(prettyData);
+			
+
+http://stackoverflow.com/questions/36856232/write-add-data-in-json-file-using-node-js
+http://stackoverflow.com/questions/1981349/regex-to-replace-multiple-spaces-with-a-single-space
+https://www.reddit.com/r/node/comments/2lmitx/what_is_the_best_database_stack_for_node_js/?st=iy7twm7s&sh=7a52c1d6
+http://stackoverflow.com/questions/3630397/how-to-sort-lis-based-on-their-id
+http://jsfiddle.net/3uYUq/
+
+
+
+//var stringData = JSON.stringify(data);
+		//console.log(stringData);
+		//var items = data.items.map(function(item) {
+
+
+
+//var items = data.map(function(item) {
+			//return '<b>' + item.name + '</b>' + ' (' + item.location + '; ' + item.date + ') ' + ': ' + item.summary;
+
+
+
+		//var elems = $(this).children().remove();
+//return parseInt(a.id) > parseInt(b.id);
+
+		//event after append the element into DOM, do anything
+		//console.log(this);
+		// var userData = $(this).find('#user-data-list');
+		// var nodes = $(userData).children();
+		// for (var i = 0; i < nodes.length; i++) {
+		// console.log(nodes[i]);
+		// var node = nodes[i];
+		// var dateInfo = $(node).find('.date');
+		// console.log(dateInfo[0].id);
+		// }

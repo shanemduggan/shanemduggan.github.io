@@ -1,0 +1,41 @@
+li {
+	margin: 0 5px 10px 0;
+}
+body {
+	height: 100%;
+}
+html {
+	height: 100%;
+}
+.containers {
+	display: inline;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+}
+a:visited {
+	color: blue;
+}
+a#user-data-close {
+	float: right;
+	padding-right: .5%;
+}
+a#user-data-clear {
+	float: right;
+}
+#show-data {
+	width: 80%;
+	height: auto;
+}
+#user-data {
+	width: 19%;
+	height: 100%;
+}
+#user-data-expand {
+	float: right;
+	padding-right: .5%;
+}
+#user-data-collapse {
+	float: right;
+	padding-right: .5%;
+}
