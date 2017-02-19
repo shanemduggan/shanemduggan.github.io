@@ -93,7 +93,7 @@ function visitPage(url, callback) {
 			
 		
 			var uniqueEventNames = allEventNames.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
-			fs.writeFile('data/february/timeoutEventNAmes.txt', uniqueEventNames, 'utf8', function(err) {
+			fs.writeFile('../data/february/timeoutEventNames.txt', uniqueEventNames, 'utf8', function(err) {
 				if (err) {
 					return console.log(err);
 				}
@@ -110,7 +110,7 @@ function visitPage(url, callback) {
 			}
 			var json2 = JSON.stringify(eventData);
 
-			fs.writeFile('data/february/timeout.json', json2, 'utf8', function(err) {
+			fs.writeFile('../data/february/timeout.json', json2, 'utf8', function(err) {
 				if (err) {
 					return console.log(err);
 				}

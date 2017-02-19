@@ -1,5 +1,6 @@
 $(document).ready(function() {
-	var jsonFiles = ['laweekly.json', 'discover.json'];
+	var jsonFiles = ['timeout.json', 'laweekly.json', 'discover.json'];
+	//var jsonFiles = ['timeout.json'];
 
 	setUpButtons();
 	sortFunctions();
@@ -15,26 +16,36 @@ function getJson(fileDir) {
 	var fullDir = 'data/february/' + fileDir;
 	$.getJSON(fullDir, function(data) {
 		var filteredData = [];
+
 		for (var i = 0; i < data.length; i++) {
-			if (data[i].date.includes('Until') || data[i].date.includes(' - ')) {
+			if (data[i].date.includes('Until') || data[i].date.includes('5') || data[i].date.includes('6') || data[i].date.includes('8')) {
 			} else {
 				filteredData.push(data[i]);
 			}
 		}
 
 		for (var i = 0; i < filteredData.length; i++) {
-			
+			var item = filteredData[i];
 			var nameSplit = filteredData[i].name.split(' ');
 			if (nameSplit[0] == nameSplit[0].toUpperCase() && nameSplit[1] == nameSplit[1].toUpperCase()) {
 				var newName = toTitleCase(filteredData[i].name);
 				filteredData[i].name = newName;
 			}
-			
-			
-			var item = filteredData[i];
-			var index = item.date.indexOf('February');
-			var date = item.date.slice(index, item.date.length);
-			var dateSplit = item.date.split(' ');
+
+			if (item.date.includes(' - ')) {
+				var dateSplit = item.date.split(' - ');
+				filteredData[i].dateFirst = dateSplit[0];
+			}
+
+			if (item.dateFirst) {
+				var index = item.dateFirst.indexOf('February');
+				var date = item.dateFirst.slice(index, item.dateFirst.length);
+				var dateSplit = item.dateFirst.split(' ');
+			} else {
+				var index = item.date.indexOf('February');
+				var date = item.date.slice(index, item.date.length);
+				var dateSplit = item.date.split(' ');
+			}
 
 			if (dateSplit.length == 4) {
 				if (dateSplit[2].length == 1) {
@@ -51,23 +62,29 @@ function getJson(fileDir) {
 					var numDate = '02' + dateSplit[1] + '2017';
 				}
 			}
+
 			filteredData[i].dateFormed = numDate;
 
+			// var locationPiece = '';
+			// var namePiece = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>';
+			// var datePiece = '';
+
 			if (filteredData[i].location == "")
-				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span><br><br>' + item.summary;
+				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + item.summary + '<br><br>';
 			else
-				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span><br><br>' + item.summary;
+				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + item.summary + '<br><br>';
 		}
 
 		if (filteredData.length) {
 			for (var i = 0; i < filteredData.length; i++) {
-				//console.log(filteredData[i]);
-
 				var potentialParent = $('#show-data').find("ul#" + filteredData[i].dateFormed);
 				if (potentialParent.length) {
 					potentialParent.append('<li>' + filteredData[i].element + '</li>')
 				} else {
-					$('#show-data').append('<div class="show-data-box"><div><h3>' + filteredData[i].date + '</h3><ul id="' + filteredData[i].dateFormed + '"><li>' + filteredData[i].element + '</li></ul></div></div>').trigger("app-appened");
+					if (filteredData[i].dateFirst)
+						$('#show-data').append('<div class="show-data-box" id="' + filteredData[i].dateFormed + '"><div><h3>' + filteredData[i].dateFirst + '</h3><ul id="' + filteredData[i].dateFormed + '"><li>' + filteredData[i].element + '</li></ul></div></div>').trigger("app-appened");
+					else
+						$('#show-data').append('<div class="show-data-box" id="' + filteredData[i].dateFormed + '"><div><h3>' + filteredData[i].date + '</h3><ul id="' + filteredData[i].dateFormed + '"><li>' + filteredData[i].element + '</li></ul></div></div>').trigger("app-appened");
 				}
 			}
 		}
@@ -93,6 +110,18 @@ function sortFunctions() {
 
 	$("body").on("app-appened", "div", function(event) {
 		$('#user-data').css('height', $('#show-data').height() + 30);
+		var elems = $('#show-data').find('.show-data-box');
+		if (elems.length > 1) {
+			elems.sort(function(a, b) {
+				return parseInt($(a)[0].id) > parseInt($(b)[0].id)
+			});
+
+			$('#show-data').html('');
+			for (var i = 0; i < elems.length; i++) {
+				$('#show-data').append(elems[i]);
+			}
+		}
+
 	});
 
 	setTimeout(function() {
