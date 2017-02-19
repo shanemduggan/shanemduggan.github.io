@@ -22,7 +22,16 @@ function getJson(fileDir) {
 			}
 		}
 
-		var items = filteredData.map(function(item) {
+		for (var i = 0; i < filteredData.length; i++) {
+			
+			var nameSplit = filteredData[i].name.split(' ');
+			if (nameSplit[0] == nameSplit[0].toUpperCase() && nameSplit[1] == nameSplit[1].toUpperCase()) {
+				var newName = toTitleCase(filteredData[i].name);
+				filteredData[i].name = newName;
+			}
+			
+			
+			var item = filteredData[i];
 			var index = item.date.indexOf('February');
 			var date = item.date.slice(index, item.date.length);
 			var dateSplit = item.date.split(' ');
@@ -42,27 +51,35 @@ function getJson(fileDir) {
 					var numDate = '02' + dateSplit[1] + '2017';
 				}
 			}
+			filteredData[i].dateFormed = numDate;
 
-			return '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span><br>' + item.summary;
-		});
-		//showData.empty();
-		if (items.length) {
-			var content = '<li>' + items.join('</li><li>') + '</li>';
+			if (filteredData[i].location == "")
+				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span><br><br>' + item.summary;
+			else
+				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span><br><br>' + item.summary;
+		}
 
-			if ($('#show-data').find('ul').length == 0) {
-				var list = $('<ul />').html(content).trigger("app-appened");
-				;
-				showData.append(list);
-			} else {
-				//showData.append(content);
-				$('#show-data').find('ul').append(content).trigger("app-appened");
-				;
+		if (filteredData.length) {
+			for (var i = 0; i < filteredData.length; i++) {
+				//console.log(filteredData[i]);
+
+				var potentialParent = $('#show-data').find("ul#" + filteredData[i].dateFormed);
+				if (potentialParent.length) {
+					potentialParent.append('<li>' + filteredData[i].element + '</li>')
+				} else {
+					$('#show-data').append('<div class="show-data-box"><div><h3>' + filteredData[i].date + '</h3><ul id="' + filteredData[i].dateFormed + '"><li>' + filteredData[i].element + '</li></ul></div></div>').trigger("app-appened");
+				}
 			}
 		}
 	});
 
-	//showData.text('Loading the JSON file.');
 	$('#user-data').append('<ul id="user-data-list"></ul>');
+}
+
+function toTitleCase(str) {
+	return str.replace(/\w\S*/g, function(txt) {
+		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+	});
 }
 
 function sortFunctions() {
@@ -75,18 +92,17 @@ function sortFunctions() {
 	});
 
 	$("body").on("app-appened", "div", function(event) {
-		var elems = $(this).find('ul').children();
-		elems.sort(function(a, b) {
-			return parseInt($(a).find('.date')[0].id) > parseInt($(b).find('.date')[0].id)
-		});
-		$('#show-data').find('ul').append(elems);
-		$('#user-data').css('height', $('#show-data').height());
+		$('#user-data').css('height', $('#show-data').height() + 30);
 	});
 
 	setTimeout(function() {
 		var eventNodes = $('#show-data').find('li');
 		for (var i = 0; i < eventNodes.length; i++) {
 			$(eventNodes[i]).click(function() {
+
+				if ($('#user-data-welcome').css('display') == 'block')
+					$('#user-data-welcome').hide();
+
 				var headerData = $(this).contents('span').html();
 				var split = headerData.split('</b>');
 				var name = split[0].replace('<b>', '')
