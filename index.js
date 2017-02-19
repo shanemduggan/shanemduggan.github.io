@@ -18,7 +18,7 @@ function getJson(fileDir) {
 		var filteredData = [];
 
 		for (var i = 0; i < data.length; i++) {
-			if (data[i].date.includes('Until') || data[i].date.includes('5') || data[i].date.includes('6') || data[i].date.includes('8')) {
+			if (!data[i].date.includes('February') || data[i].date.includes('Until') || data[i].date.includes('5') || data[i].date.includes('6') || data[i].date.includes('8')) {
 			} else {
 				filteredData.push(data[i]);
 			}
@@ -68,11 +68,15 @@ function getJson(fileDir) {
 			// var locationPiece = '';
 			// var namePiece = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>';
 			// var datePiece = '';
+			var summaryPiece = '';
+			
+			if (filteredData[i].summary != "")
+				summaryPiece = '<br>' + item.summary + '<br><br>';
 
 			if (filteredData[i].location == "")
-				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + item.summary + '<br><br>';
+				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
 			else
-				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + item.summary + '<br><br>';
+				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
 		}
 
 		if (filteredData.length) {
