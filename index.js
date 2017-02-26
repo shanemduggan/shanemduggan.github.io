@@ -8,6 +8,8 @@ $(document).ready(function() {
 
 	for (var i = 0; i < jsonFiles.length; i++) {
 		getJson(jsonFiles[i]);
+		if (i == jsonFiles.length - 1)
+			$('#top')[0].scrollIntoView(true);
 	}
 
 	initMap();
@@ -52,6 +54,13 @@ function placeMarker(address) {
 		}
 	});
 
+	$('#navItem2').css('background-color', 'white');
+	$('#navItem2').css('color', 'black');
+
+	setTimeout(function() {
+		$('#navItem2').css('background-color', 'black');
+		$('#navItem2').css('color', 'white');
+	}, 250);
 }
 
 function getJson(fileDir) {
@@ -289,6 +298,18 @@ function setUpButtons() {
 
 	$('#user-data-clear').click(function() {
 		$('#user-data-list').html('');
+	});
+
+	$('#navItem1').click(function() {
+		$('#top')[0].scrollIntoView(false);
+	});
+
+	$('#navItem2').click(function() {
+		//$('#mapContainer')[0].scrollIntoView(false);
+		//$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+		$("html, body").animate({
+			scrollTop : $(document).height()
+		});
 	});
 }
 
