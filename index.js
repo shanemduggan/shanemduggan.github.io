@@ -1,6 +1,7 @@
+var map;
+
 $(document).ready(function() {
 	var jsonFiles = ['timeout.json', 'laweekly.json', 'discover.json'];
-	//var jsonFiles = ['timeout.json'];
 
 	setUpButtons();
 	sortFunctions();
@@ -9,7 +10,49 @@ $(document).ready(function() {
 		getJson(jsonFiles[i]);
 	}
 
+	initMap();
+
 });
+
+function initMap() {
+	var losAngeles = {
+		lat : 34.0416,
+		lng : -118.328661
+	}
+	map = new google.maps.Map(document.getElementById('mapContainer'), {
+		zoom : 11,
+		center : losAngeles,
+		scrollwheel : false
+	});
+}
+
+function placeMarker(address) {
+	var geocoder = new google.maps.Geocoder();
+	geocoder.geocode({
+		'address' : address
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			var lat = results[0].geometry.location.lat();
+			var lng = results[0].geometry.location.lng();
+
+			var myLatlng = new google.maps.LatLng(lat, lng);
+			var marker = new google.maps.Marker({
+				position : myLatlng,
+				map : map
+			});
+
+			var contentString = "<html><body><div><p><h4>" + address + "</h4></p></div></body></html>";
+			var infowindow = new google.maps.InfoWindow({
+				content : contentString
+			});
+
+			marker.addListener('click', function() {
+				infowindow.open(map, marker);
+			});
+		}
+	});
+
+}
 
 function getJson(fileDir) {
 	var showData = $('#show-data');
@@ -17,23 +60,30 @@ function getJson(fileDir) {
 	$.getJSON(fullDir, function(data) {
 		var filteredData = [];
 
-		for (var i = 0; i < data.length; i++) {
-			if (!data[i].date.includes('February') || data[i].date.includes('Until') || data[i].date.includes('5') || data[i].date.includes('6') || data[i].date.includes('8')) {
-			} else {
+		if (data.length) {
+			for (var i = 0; i < data.length; i++) {
 				filteredData.push(data[i]);
+			}
+		} else {
+			for (var i = 0; i < data.events.length; i++) {
+				if (!data.events[i].date.includes('Until'))
+					filteredData.push(data.events[i]);
 			}
 		}
 
 		for (var i = 0; i < filteredData.length; i++) {
 			var item = filteredData[i];
 			var nameSplit = filteredData[i].name.split(' ');
-			if (nameSplit[0] == nameSplit[0].toUpperCase() && nameSplit[1] == nameSplit[1].toUpperCase()) {
+			if (nameSplit[0] == nameSplit[0].toUpperCase()) {
 				var newName = toTitleCase(filteredData[i].name);
 				filteredData[i].name = newName;
 			}
 
 			if (item.date.includes(' - ')) {
 				var dateSplit = item.date.split(' - ');
+				filteredData[i].dateFirst = dateSplit[0];
+			} else if (item.date.includes('-')) {
+				var dateSplit = item.date.split('-');
 				filteredData[i].dateFirst = dateSplit[0];
 			}
 
@@ -69,14 +119,19 @@ function getJson(fileDir) {
 			// var namePiece = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>';
 			// var datePiece = '';
 			var summaryPiece = '';
-			
+
 			if (filteredData[i].summary != "")
 				summaryPiece = '<br>' + item.summary + '<br><br>';
+
+			if (item.locationAddress)
+				locationAddress = item.locationAddress;
+			else
+				locationAddress = '';
 
 			if (filteredData[i].location == "")
 				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
 			else
-				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
+				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" id="' + locationAddress + '" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
 		}
 
 		if (filteredData.length) {
@@ -126,6 +181,10 @@ function sortFunctions() {
 			}
 		}
 
+		setTimeout(function() {
+			$('#mapContainer').css('margin-top', $('#show-data').height() + 100)
+		}, 500);
+
 	});
 
 	setTimeout(function() {
@@ -143,6 +202,12 @@ function sortFunctions() {
 				if (nodeCheck.length)
 					return;
 				$('#user-data-list').append('<li class="user-data-node">' + headerData + '</li>').trigger("user-appened");
+
+				var HTML = $(this).html();
+				console.log(HTML);
+				var location = $(HTML).find('a')[0].id;
+				if (location != "")
+					placeMarker(location);
 			});
 		}
 	}, 1000);
