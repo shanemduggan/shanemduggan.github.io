@@ -5,15 +5,11 @@ $(document).ready(function() {
 
 	setUpButtons();
 	sortFunctions();
+	initMap();
 
 	for (var i = 0; i < jsonFiles.length; i++) {
 		getJson(jsonFiles[i]);
-		if (i == jsonFiles.length - 1)
-			$('#top')[0].scrollIntoView(true);
 	}
-
-	initMap();
-
 });
 
 function initMap() {
@@ -24,11 +20,12 @@ function initMap() {
 	map = new google.maps.Map(document.getElementById('mapContainer'), {
 		zoom : 11,
 		center : losAngeles,
-		scrollwheel : false
+		scrollwheel : false,
+		mapTypeControl : false
 	});
 }
 
-function placeMarker(address) {
+function placeMarker(address, item) {
 	var geocoder = new google.maps.Geocoder();
 	geocoder.geocode({
 		'address' : address
@@ -40,27 +37,34 @@ function placeMarker(address) {
 			var myLatlng = new google.maps.LatLng(lat, lng);
 			var marker = new google.maps.Marker({
 				position : myLatlng,
-				map : map
+				map : map,
+				animation : google.maps.Animation.DROP
 			});
 
-			var contentString = "<html><body><div><p><h4>" + address + "</h4></p></div></body></html>";
+			console.log(item);
+			var contentString = "<html><body><div><p><h4>" + item.name + "</h4>" + item.date + "<br>" + item.location + "</p></div></body></html>";
 			var infowindow = new google.maps.InfoWindow({
 				content : contentString
 			});
 
-			marker.addListener('click', function() {
-				infowindow.open(map, marker);
+			marker.addListener('mouseover', function() {
+				infowindow.open(map, this);
+			});
+
+			marker.addListener('mouseout', function() {
+				infowindow.close();
 			});
 		}
 	});
+}
 
-	$('#navItem2').css('background-color', 'white');
-	$('#navItem2').css('color', 'black');
-
+function addMarkerOnLoad(item) {
+	console.log(item.locationAddress);
+	var timer = Math.floor((Math.random() * 20000) + 1);
+	console.log(timer);
 	setTimeout(function() {
-		$('#navItem2').css('background-color', 'black');
-		$('#navItem2').css('color', 'white');
-	}, 250);
+		placeMarker(item.locationAddress, item);
+	}, timer);
 }
 
 function getJson(fileDir) {
@@ -125,22 +129,34 @@ function getJson(fileDir) {
 			filteredData[i].dateFormed = numDate;
 
 			// var locationPiece = '';
-			// var namePiece = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>';
+			// var namePiece = '<span class="itemHeader" id="' +
+			//item.name + '"><b>' + item.name + '</b>';
 			// var datePiece = '';
 			var summaryPiece = '';
 
 			if (filteredData[i].summary != "")
 				summaryPiece = '<br>' + item.summary + '<br><br>';
 
-			if (item.locationAddress)
+			if (item.locationAddress) {
 				locationAddress = item.locationAddress;
-			else
+				addMarkerOnLoad(item);
+			} else
 				locationAddress = '';
 
-			if (filteredData[i].location == "")
-				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
-			else
-				filteredData[i].element = '<span class="itemHeader" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" id="' + locationAddress + '" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
+			if (item.type) {
+				console.log(item.date);
+				console.log(item.type);
+				var type = getFilterOption(item.type);
+				console.log(type);
+				item.type = type;
+			} else
+				item.type = '';
+
+			if (filteredData[i].location == "") {
+				filteredData[i].element = '<span class="itemHeader" data-type="' + item.type + '" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
+			} else {
+				filteredData[i].element = '<span class="itemHeader" data-type="' + item.type + '" id="' + item.name + '"><b>' + item.name + '</b>' + ' (<a target="_blank" id="' + locationAddress + '" href="' + item.locationLink + '">' + item.location + '</a>; <span class="date" id="' + numDate + '">' + item.date + ') ' + '</span></span>' + summaryPiece;
+			}
 		}
 
 		if (filteredData.length) {
@@ -159,6 +175,28 @@ function getJson(fileDir) {
 	});
 
 	$('#user-data').append('<ul id="user-data-list"></ul>');
+}
+
+function getFilterOption(type) {
+	var type = type.replace('/', '').trim();
+	switch (type) {
+	case "Museums & Galleries":
+		return "Art Gallery & Museum";
+	case "Sports":
+		return "Sports";
+	case "Festivals":
+		return "Festivals";
+	case "Art & Theatre":
+		return "Art & Theatre";
+	case "Miscellaneous":
+		return "Miscellaneous";
+	case "Music":
+		return "Music";
+	case "Educational":
+		return "Educational";
+	default:
+		return "Miscellaneous";
+	}
 }
 
 function toTitleCase(str) {
@@ -189,11 +227,6 @@ function sortFunctions() {
 				$('#show-data').append(elems[i]);
 			}
 		}
-
-		setTimeout(function() {
-			$('#mapContainer').css('margin-top', $('#show-data').height() + 100)
-		}, 500);
-
 	});
 
 	setTimeout(function() {
@@ -220,6 +253,11 @@ function sortFunctions() {
 			});
 		}
 	}, 1000);
+
+	setTimeout(function() {
+		$('#show-data').hide();
+		$('#user-data').hide();
+	}, 10);
 }
 
 function setUpButtons() {
@@ -227,89 +265,126 @@ function setUpButtons() {
 		$(this).remove();
 	});
 
-	$('#show-data-close').click(function() {
-		$('#show-data').animate({
-			width : 'toggle'
-		}).trigger("show-data-toggled");
-
-		if ($('#show-data-close').text() == 'Close')
-			$('#show-data-close').text('Open');
-		else if ($('#show-data-close').text() == 'Open')
-			$('#show-data-close').text('Close');
-	});
-
-	$("body").on("show-data-toggled", "div", function(event) {
-		setTimeout(function() {
-			if ($('#show-data').css('display') == 'none') {
-				$('#user-data').css('width', '100%');
-			} else {
-				var bodyWidth = $('body').width();
-				var userWidth = $('#user-data').width();
-				if (userWidth / bodyWidth >= .20)
-					$('#user-data').css('width', '38%');
-				else
-					$('#user-data').css('width', '19%');
-			}
-		}, 500);
-	});
-
-	$('#user-data-close').click(function() {
-		$('#user-data').animate({
-			width : 'toggle'
-		}).trigger("user-data-toggled");
-
-		if ($('#user-data-close').text() == 'Close')
-			$('#user-data-close').text('Open');
-		else if ($('#user-data-close').text() == 'Open')
-			$('#user-data-close').text('Close');
-	});
-
-	$("body").on("user-data-toggled", "div", function(event) {
-		setTimeout(function() {
-			if ($('#user-data').css('display') == 'none') {
-				$('#show-data').css('width', '100%');
-				$('#user-data-clear').hide()
-				$('#user-data-expand').hide()
-				$('#user-data-collapse').hide()
-
-			} else {
-				$('#show-data').css('width', '80%');
-				$('#user-data-clear').show()
-				$('#user-data-expand').show()
-				$('#user-data-collapse').show()
-			}
-		}, 500);
-	});
-
-	$('#user-data-expand').click(function() {
-		if ($('#user-data-expand').text() == 'Expand') {
-			$('#user-data').css('width', '38%');
-			$('#show-data').css('width', '60%');
-			$('#user-data-expand').text('Collapse');
-			$('#user-data').css('height', $('#show-data').height());
-		} else if ($('#user-data-expand').text() == 'Collapse') {
-			$('#user-data').css('width', '19%');
-			$('#show-data').css('width', '80%');
-			$('#user-data-expand').text('Expand');
-			$('#show-data').css('height', $('#user-data').height());
-		}
-
-	});
-
 	$('#user-data-clear').click(function() {
 		$('#user-data-list').html('');
 	});
 
-	$('#navItem1').click(function() {
-		$('#top')[0].scrollIntoView(false);
+	$('#hideMap').click(function() {
+		$("#wrapper").toggle();
 	});
 
-	$('#navItem2').click(function() {
-		//$('#mapContainer')[0].scrollIntoView(false);
-		//$("html, body").animate({ scrollTop: $(document).height() }, "slow");
-		$("html, body").animate({
-			scrollTop : $(document).height()
-		});
+	$('#hideLists').click(function() {
+		$("#show-data").toggle();
+		$("#user-data").toggle();
 	});
+
+	$('#typeFilter select').change(function(e) {
+		$('#show-data').show();
+		var index = $('#typeFilter select').val();
+		var val = $("#typeFilter select option[value='" + index + "']").text();
+		console.log(val);
+
+		var uls = $('#show-data ul');
+		if (val == "Show all") {
+			for (var i = 0; i < uls.length; i++) {
+				$(uls[i].parentElement).parent().show();
+				$('#show-data li').show();
+			}
+		} else if (val == "Select an event type") {
+			for (var i = 0; i < uls.length; i++) {
+				$(uls[i].parentElement).parent().show();
+				$('#show-data li').show();
+			}
+			$('#show-data').hide();
+		} else {
+			for (var i = 0; i < uls.length; i++) {
+				var lis = $(uls[i]).children();
+				$(lis).hide();
+				for (var p = 0; p < lis.length; p++) {
+					if ($(lis[p]).find('span').attr('data-type') != "") {
+						if ($(lis[p]).find('span').attr('data-type') == val) {
+							$(lis[p]).show();
+						}
+					}
+				}
+			}
+			var ulsArray = $.makeArray(uls);
+			ulsArray.forEach(function(ele) {
+				console.log(ele);
+				if ($(ele).find('li:visible').length === 0) {
+					$(ele.parentElement).parent().hide();
+				}
+			});
+		}
+	});
+
+	$('#dateFilter select').change(function(e) {
+		$('#show-data').show();
+		var index = $('#dateFilter select').val();
+		var val = $("#dateFilter select option[value='" + index + "']").text();
+		var uls = $('#show-data ul');
+		if (val == "Show all") {
+			for (var i = 0; i < uls.length; i++) {
+				$(uls[i].parentElement).parent().show();
+			}
+		} else if (val == "Select a date") {
+			for (var i = 0; i < uls.length; i++) {
+				$(uls[i].parentElement).parent().show();
+				$('#show-data li').show();
+			}
+			$('#show-data').hide();
+		} else {
+			for (var i = 0; i < uls.length; i++) {
+				$(uls[i].parentElement).parent().hide();
+				var parent = $(uls[i].parentElement).parent();
+				var text = $(parent).find('h3:contains("' + val + '")').text();
+				if (text)
+					$(parent).show();
+				else
+					$(parent).hide();
+
+			}
+		}
+	});
+
+	// var monthDates = getDateFilterOptions();
+	// console.log(monthDates);
+	// for (var i = 0; i < monthDates.length; i++) {
+		// $('#dateFilter select').append($('<option>', {
+			// value : i + 2,
+			// text : monthDates[i]
+		// })); 
+	// }
+}
+
+function getDateFilterOptions() {
+	var date = new Date();
+	var monthsArray = [];
+
+	monthsArray[0] = 'January';
+	monthsArray[1] = 'February';
+	monthsArray[2] = 'March';
+	monthsArray[3] = 'April';
+	monthsArray[4] = 'May';
+	monthsArray[5] = 'June';
+	monthsArray[6] = 'July';
+	monthsArray[7] = 'August';
+	monthsArray[8] = 'September';
+	monthsArray[9] = 'October';
+	monthsArray[10] = 'November';
+	monthsArray[11] = 'December';
+	
+	var monthName = monthsArray[date.getMonth()];
+	var month = date.getMonth();
+	var year = 2017;
+	var date = new Date(year, month, 1);
+	var days = [];
+	while (date.getMonth() === month) {
+		var monthDay = new Date(date).getDate();
+		var monthDate = monthName + ' ' + monthDay;
+		days.push(monthDate);
+		date.setDate(date.getDate() + 1);
+	}
+	return days;
 }
 

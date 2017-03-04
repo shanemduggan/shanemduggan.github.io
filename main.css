@@ -33,8 +33,10 @@ a#user-data-clear {
 	float: right;
 }
 #show-data {
-	width: 65%;
+	width: 64%;
 	height: auto;
+	margin-left: 8px;
+	float: left;
 }
 
 .show-data-box {
@@ -60,6 +62,7 @@ a#user-data-clear {
 }
 
 #user-data {
+	margin-right: 8px;
 	width: 34%;
 	height: 100%;
 	background-color: white;
@@ -80,10 +83,10 @@ a#user-data-clear {
 	padding-right: .5%;
 }
 
-#title {
-	/*border-bottom: thick solid #fff;*/
+/*#title {
+	/*border-bottom: thick solid #fff;
 	color: white;
-}
+}*/
 
 #user-data div {
 	padding: 5% 30% 0 30%;
@@ -93,32 +96,74 @@ a#user-data-clear {
 }
 
 #mapContainer {
-	height: 500px;
+	height: 425px;
 	width: 100%;
 	background-color: white;
-	margin-top: 50px;
-	margin-bottom: 100px;
+	/*margin-top: 50px;
+	margin-bottom: 100px;*/
 }
 
-#menu {
+/*#menu {
 	position: fixed;
 	top: 0px;
 	z-index: 5;
 	background-color: black;
 	width: 100%;
 	margin-left: -8px;
-}
+}*/
 
-#title {
+/*#title {
 	margin-left: 8px;
 	display: inline-block;
-}
+}*/
 
-#menu div {
+/*#menu div {
 	color: white;
 	display: inline-block;
 	float: right;
 	padding: 20px;
 	border-left: white 1px solid;
 	height: 27px;
+}*/
+
+#title {
+	color: white;	
+	font-size: 22px;
+}
+
+
+#wrapper { 
+	/*position: relative; */
+	margin-top: 5%;
+}
+
+/*#over_map { 
+	position: absolute; 
+	top: 0px; 
+	left: 0px; 
+	z-index: 99; 
+}*/
+
+body {
+	margin: 0;
+}
+
+select {
+	border-radius: 7px;
+	font-size: 14px;
+}
+
+#typeFilter {
+	display: inline-block;
+}
+
+#dateFilter {
+	
+}
+
+.buttons {
+	margin-bottom: 20px;
+	float:left;
+	margin: 8px;
+	margin-bottom: 20px;
 }

@@ -9,16 +9,57 @@
 
 		<div id="menu">
 			<h2 id='title'>HereSay</h2>
-			<div id="navItem2">Map</div>
-			<div id="navItem1">List</div>
 		</div>
-		<div id="top"></div>
-		<br>
-		<br>
-		<br>
-		<br>
 
-		<div style="float:left;" id="show-data" class="containers"></div>
+		<div id="wrapper">
+			<div id="google_map">
+				<div id="mapContainer"></div>
+			</div>
+		</div>
+
+		<div class="buttons">
+			<button id="hideMap" type="button">
+				Hide/Show map
+			</button>
+		</div>
+		
+		<div class="buttons">
+			<button id="hideLists" type="button">
+				Hide/Show lists
+			</button>
+		</div>
+
+	
+		<div id="typeFilter" class="buttons">
+			<select>
+				<option value="0" selected="selected">Select an event type</option>
+				<option value="1">Show all</option>
+				<option value="2">Art Gallery & Museum</option>
+				<option value="3">Comedy</option>
+				<option value="4">Music</option>
+				<option value="5">Festival</option>
+				<option value="6">Sports</option>
+				<option value="7">Art & Theatre</option>
+				<option value="8">Family</option>
+				<option value="9">Educational</option>
+				<option value="10">Miscellaneous</option>
+			</select>
+		</div>
+		
+		<div id="dateFilter" class="buttons">
+			<select>
+				<option value="0" selected="selected">Select a date</option>
+				<option value="1">Show all</option>
+				<option value="2">February 24</option>
+				<option value="3">February 25</option>
+				<option value="4">February 26</option>
+				<option value="5">February 27</option>
+				<option value="6">February 28</option>
+			</select>
+		</div>
+		<br><br><br>
+
+		<div id="show-data" class="containers"></div>
 		<div style="float: right;" id="user-data" class="containers">
 			<div id="user-data-welcome">
 				<i>Click on an event to the
@@ -26,22 +67,6 @@
 				left to add it to your list</i>
 			</div>
 		</div>
-		<div id="mapTop"></div><br>
-		<div class="containers">
-			<div id="mapContainer">
-			</div>
-		</div>
-
-		<!--<h2 style="text-align: center;">February Events in Los Angeles</h2>-->
-		<!--h4 style="float:left; padding-left: 32.5%;">All events</h4>
-		<h4 style="float:right; padding-right: 7.5%;">My events</h4>-->
-
-		<!--<div>
-		<a id="show-data-close" href="#">Close</a>
-		<a id="user-data-clear" href="#">Clear</a>
-		<a id="user-data-close" href="#">Close</a>
-		<a id="user-data-expand" href="#">Expand</a>
-		</div>-->
 
 		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0MK06KIq5QAHH-lIlF-c6Y5Yig1yMjPw"></script>
