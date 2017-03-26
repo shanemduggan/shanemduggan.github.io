@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>HereSay Proto</title>
-		<link rel="stylesheet" type="text/css" href="main.css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	<body>
 
@@ -11,25 +12,28 @@
 			<h2 id='title'>HereSay</h2>
 		</div>
 
+		<br>
 		<div id="wrapper">
-			<div id="google_map">
-				<div id="mapContainer"></div>
+			<div id="sidePanel">
+				<ul></ul>
 			</div>
+			<!--<div id="google_map">-->
+			<div id="mapContainer"></div>
+			<!--</div>-->
+		</div>
+
+		<!-- <div class="buttons">
+		<button id="hideMap" type="button">
+		Hide/Show map
+		</button>
 		</div>
 
 		<div class="buttons">
-			<button id="hideMap" type="button">
-				Hide/Show map
-			</button>
-		</div>
-		
-		<div class="buttons">
-			<button id="hideLists" type="button">
-				Hide/Show lists
-			</button>
-		</div>
+		<button id="hideLists" type="button">
+		Hide/Show lists
+		</button>
+		</div> -->
 
-	
 		<div id="typeFilter" class="buttons">
 			<select>
 				<option value="0" selected="selected">Select an event type</option>
@@ -45,22 +49,17 @@
 				<option value="10">Miscellaneous</option>
 			</select>
 		</div>
-		
+
 		<div id="dateFilter" class="buttons">
-			<select>
+			<select id="selectDate">
 				<option value="0" selected="selected">Select a date</option>
 				<option value="1">Show all</option>
-				<option value="2">February 24</option>
-				<option value="3">February 25</option>
-				<option value="4">February 26</option>
-				<option value="5">February 27</option>
-				<option value="6">February 28</option>
 			</select>
 		</div>
-		<br><br><br>
+		<!-- <br><br><br> -->
 
-		<div id="show-data" class="containers"></div>
-		<div style="float: right;" id="user-data" class="containers">
+		<div id="show-data" class="containers" style="display:none"></div>
+		<div style="float: right;" id="user-data" class="containers" style="display:none">
 			<div id="user-data-welcome">
 				<i>Click on an event to the
 				<br>
@@ -69,8 +68,12 @@
 		</div>
 
 		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0MK06KIq5QAHH-lIlF-c6Y5Yig1yMjPw"></script>
-		<script src="index.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcIb1KF-PhD_-R1NkUiuWpMhftyrJlQck"></script>
+		<script src="js/map.js"></script>
+		<script src="js/utility.js"></script>
+		<script src="js/sorting.js"></script>
+		<script src="js/buttons.js"></script>
+		<script src="js/index.js"></script>
 	</body>
 </html>
 
