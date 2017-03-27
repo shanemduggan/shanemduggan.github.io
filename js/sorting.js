@@ -53,12 +53,7 @@ function sortFunctions() {
 	}, 10);
 }
 
-function filterMap(parent) {
-	//console.log(parent);
-	//var events = $(parent).find('li');
-
-	//console.log('# of markers: ' + markers.length);
-
+function filterMapDate(parent) {
 	for (var i = 0; i < markers.length; i++) {
 		markers[i].setMap(null);
 	}
@@ -68,13 +63,11 @@ function filterMap(parent) {
 	$('#sidePanel ul').html('');
 	$('#sidePanel h3').remove();
 	var dateFiltered = $(parent).find('h3').text()
-	$('#sidePanel').prepend('<h3>'+ dateFiltered +'</h3>');
-	//var locationElements = $(parent).find('li').find('span.itemHeader a');
+	$('#sidePanel').prepend('<h3>' + dateFiltered + '</h3>');
+	$("#selectType").val('0');
 	var nodes = $(parent).find('li');
-	//nodes.splice(0, 99);
 	var newArray = $.makeArray(nodes).slice(0, 20);
 
-	//newArray.each(function(i, item) {
 	newArray.forEach(function(item, i) {
 		if ($(item).find('span.itemHeader a').length) {
 			var address = $(item).find('span.itemHeader a').attr('id').replace('\\', '');
@@ -92,6 +85,37 @@ function filterMap(parent) {
 
 		addMarkerOnLoad(item);
 
+		$('#sidePanel ul').append('<li>' + item.name + '</li>');
+
+	});
+}
+
+function filterMapType(nodes, type) {
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+	}
+	markers = [];
+	var locations = [];
+	$('#sidePanel ul').html('');
+	$('#sidePanel h3').remove();
+	$('#sidePanel').prepend('<h3>' + type + '</h3>');
+	$("#selectDate").val('0');
+	var newArray = $.makeArray(nodes).slice(0, 20);
+	newArray.forEach(function(item, i) {
+		if ($(item).find('span.itemHeader a').length) {
+			var address = $(item).find('span.itemHeader a').attr('id').replace('\\', '');
+			var location = $(item).find('span.itemHeader a').text();
+		}
+		var name = $(item).find('span.itemHeader').attr('id');
+		var date = $(item).find('span.date').text().replace(')', '').trim();
+
+		var item = {
+			'locationAddress' : address,
+			'location' : location,
+			'name' : name,
+			'date' : date
+		}
+		addMarkerOnLoad(item);
 		$('#sidePanel ul').append('<li>' + item.name + '</li>');
 
 	});

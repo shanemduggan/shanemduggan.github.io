@@ -6,17 +6,19 @@ function setUpButtons() {
 		//console.log(val);
 
 		var uls = $('#show-data ul');
-		if (val == "Show all") {
-			for (var i = 0; i < uls.length; i++) {
-				// $(uls[i].parentElement).parent().show();
-				// $('#show-data li').show();
-			}
-		} else if (val == "Select an event type") {
-			for (var i = 0; i < uls.length; i++) {
-				// $(uls[i].parentElement).parent().show();
-				// $('#show-data li').show();
-			}
-			$('#show-data').hide();
+		var eventNodes = [];
+		// if (val == "Show all") {
+		// for (var i = 0; i < uls.length; i++) {
+		// // $(uls[i].parentElement).parent().show();
+		// // $('#show-data li').show();
+		// }
+		// } else if (val == "Select an event type") {
+		if (val == "Select an event type") {
+			// for (var i = 0; i < uls.length; i++) {
+			// // $(uls[i].parentElement).parent().show();
+			// // $('#show-data li').show();
+			// }
+			// $('#show-data').hide();
 		} else {
 			for (var i = 0; i < uls.length; i++) {
 				var lis = $(uls[i]).children();
@@ -26,17 +28,23 @@ function setUpButtons() {
 						if ($(lis[p]).find('span').attr('data-type') == val) {
 							//$(lis[p]).show();
 							$(lis[p]).hide();
+							console.log(lis[p]);
+							//filterMapType(lis[p]);
+							eventNodes.push(lis[p]);
 						}
 					}
 				}
 			}
-			var ulsArray = $.makeArray(uls);
-			ulsArray.forEach(function(ele) {
-				//console.log(ele);
-				if ($(ele).find('li:visible').length === 0) {
-					$(ele.parentElement).parent().hide();
-				}
-			});
+			filterMapType(eventNodes, val);
+
+			// var ulsArray = $.makeArray(uls);
+			// ulsArray.forEach(function(ele) {
+			// //console.log(ele);
+			// if ($(ele).find('li:visible').length === 0) {
+			// $(ele.parentElement).parent().hide();
+			// }
+			// });
+
 		}
 	});
 
@@ -64,7 +72,7 @@ function setUpButtons() {
 				if (text) {
 					//$(parent).show();
 					$(parent).hide();
-					filterMap(parent);
+					filterMapDate(parent);
 				} else
 					$(parent).hide();
 
@@ -79,7 +87,6 @@ function setUpButtons() {
 			text : monthDates[i]
 		}));
 	}
-
 
 	// $('body').on('click', 'li.user-data-node', function() {
 	// $(this).remove();
