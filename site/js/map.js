@@ -23,6 +23,8 @@ function placeMarkers(events) {
 			var myLatlng = new google.maps.LatLng(events[i].lat, events[i].lng);
 			var marker = new google.maps.Marker({
 				position : myLatlng,
+				__name : events[i].name,
+				__link : events[i].detailPage,
 				map : map,
 				animation : google.maps.Animation.DROP
 			});

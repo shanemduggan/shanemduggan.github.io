@@ -115,6 +115,63 @@ function setUpFilters() {
 	});
 }
 
+function nearMeButton() {
+	var dateIndex = $('#dateFilter select').val();
+	var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
+	var typeIndex = $('#typeFilter select').val();
+	var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
+
+	if (dateIndex != 0 || typeIndex != 0) {
+		console.log(markers);
+
+		// Check for geolocation support
+		if (navigator.geolocation) {
+			// Use method getCurrentPosition to get coordinates
+			navigator.geolocation.getCurrentPosition(function(position) {
+				// Access them accordingly
+				var userLatLng = new window.google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				var goodMarkers = markers.filter(function(marker, index, array) {
+					var myLatlng = new window.google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
+					return google.maps.geometry.spherical.computeDistanceBetween(userLatLng, myLatlng) < 5000;
+				});
+
+				var badMarkers = markers.filter(function(marker, index, array) {
+					var myLatlng = new window.google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
+					return google.maps.geometry.spherical.computeDistanceBetween(userLatLng, myLatlng) > 5000;
+				});
+				// 5000 is roughly 3 miles
+
+				for (var i = 0; i < badMarkers.length; i++) {
+					badMarkers[i].setMap(null);
+				}
+
+				var userMarker = new google.maps.Marker({
+					position : userLatLng,
+					map : map,
+					animation : google.maps.Animation.DROP
+				});
+				
+				map.panTo(userMarker.position);
+				map.setZoom(13);
+				userMarker.setMap(null);
+
+				$('#sidePanel ul').html('');
+				$('#sidePanel h3').remove();
+				$('#sidePanel').prepend('<h3>Events near you</h3>');
+
+				for (var i = 0; i < goodMarkers.length; i++) {
+					if (goodMarkers[i].__name) {
+						var name = goodMarkers[i].__name;
+						if (goodMarkers[i].__link)
+							var link = goodMarkers[i].__link;
+						$('#sidePanel ul').append('<li><a target="_blank" href="' + link + '">' + name + '</a></li>');
+					}
+				}
+			});
+		}
+	}
+}
+
 function getLocation(event) {
 	var locationFound = _.find(locationData, function(l) {
 		return l.location === event.locationName;

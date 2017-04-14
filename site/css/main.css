@@ -157,3 +157,11 @@ a:visited { text-decoration: none; color: black; }
 a:hover { text-decoration: none; }
 a:focus { text-decoration: none; }
 a:hover, a:active { text-decoration: none; }
+
+#nearMe {
+	border-radius: 7px;
+	background-color: white;
+	border-width: 1px;
+}
+
+
