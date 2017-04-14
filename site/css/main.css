@@ -1,167 +1,164 @@
 li {
-	margin: 0 5px 10px 0;
+	margin:0 5px 10px 0;
 }
 body {
 	/*height: 100%;*/
-	background-image: url("../images/palmtreesbackground.jpg");
-	background-size: cover;
-	background-attachment: fixed;
-	position: relative;
-	margin: 0;
+	background-image:url("../images/palmtreesbackground.jpg");
+	background-size:cover;
+	background-attachment:fixed;
+	position:relative;
+	margin:0;
 }
-
 html {
-	height: 100%;
+	height:100%;
 }
 .containers {
-	display: inline;
+	display:inline;
 }
 a:visited {
-	color: blue;
+	color:blue;
 }
 a#user-data-close {
-	float: right;
-	padding-right: .5%;
+	float:right;
+	padding-right:.5%;
 }
 a#user-data-clear {
-	float: right;
+	float:right;
 }
 #show-data {
-	width: 64%;
-	height: auto;
-	margin-left: 8px;
-	float: left;
-	display: none;
+	width:64%;
+	height:auto;
+	margin-left:8px;
+	float:left;
+	display:none;
 }
-
 .show-data-box {
-	background-color: white;
-	border-width: 2px;
-	border-style: solid;
-	border-color: #808080;
-	margin-bottom: 2%;
-	border-radius: 10px;
+	background-color:white;
+	border-width:2px;
+	border-style:solid;
+	border-color:#808080;
+	margin-bottom:2%;
+	border-radius:10px;
 }
-
 .show-data-box div {
-	padding: 10px;
+	padding:10px;
 }
-
 .show-data-box ul {
-	list-style-type: none;
+	list-style-type:none;
 }
-
 #user-data {
-	margin-right: 8px;
-	width: 34%;
-	height: 100%;
-	background-color: white;
-	border-width: 2px;
-	border-style: solid;
-	border-color: #808080;
-	border-radius: 10px;
-	display: none;
+	margin-right:8px;
+	width:34%;
+	height:100%;
+	background-color:white;
+	border-width:2px;
+	border-style:solid;
+	border-color:#808080;
+	border-radius:10px;
+	display:none;
 }
 #user-data-expand {
-	float: right;
-	padding-right: .5%;
+	float:right;
+	padding-right:.5%;
 }
 #user-data-collapse {
-	float: right;
-	padding-right: .5%;
+	float:right;
+	padding-right:.5%;
 }
-
 #user-data div {
-	padding: 5% 30% 0 30%;
+	padding:5% 30% 0 30%;
 }
-
 .containers {
 }
-
 #mapContainer {
-	height: 550px;
+	height:550px;
 	/*height: 60%;*/
 	/*width: 100%;*/
-	width: 77.5%;
-	background-color: white;
+	width:77.5%;
+	background-color:white;
 	display:inline-block;
 	float:left;
 }
-
 #sidePanel {
-	width: 22.5%;
-	height: 550px;
+	width:22.5%;
+	height:550px;
 	display:inline-block;
 	float:right;
-	background-color: #EEDD82;
+	background-color:#EEDD82;
 	/*padding-top: 10%;*/
-	overflow: auto;
-	opacity: 0.8;
+	overflow:auto;
+	opacity:0.8;
 }
-
 #sidePanel ul {
-	list-style-type: none;
-	padding-left: 7.5px;
+	list-style-type:none;
+	padding-left:7.5px;
 }
-
 #sidePanel li {
-	padding-bottom: 2.5px;
-	font-size: 16px;
-	font-family: 'Roboto Slab', serif;
+	padding-bottom:2.5px;
+	font-size:16px;
+	font-family:'Roboto Slab',serif;
 }
-
 #sidePanel li:hover {
-	font-weight: bold;
+	font-weight:bold;
+}
+#sidePanel h3 {
+	text-align:center;
+}
+#title {
+	color:white;
+	font-size:22px;
+}
+#wrapper {
+	/*margin-top: 5%;*/
+}
+select {
+	border-radius:7px;
+	font-size:14px;
+}
+#typeFilter {
+	display:inline-block;
+}
+#dateFilter {
+}
+.buttons {
+	margin-bottom:20px;
+	float:left;
+	margin:8px;
+	margin-bottom:20px;
+}
+#menu {
+	margin:2.5px;
+}
+a {
+	text-decoration:none;
+	color:black;
+}
+a:visited {
+	text-decoration:none;
+	color:black;
+}
+a:hover {
+	text-decoration:none;
+}
+a:focus {
+	text-decoration:none;
+}
+a:hover, a:active {
+	text-decoration:none;
+}
+#nearMe {
+	border-radius:7px;
+	background-color:white;
+	border-width:1px;
+}
+.infoWindow a:hover {
+	text-decoration: underline;
 }
 
-#sidePanel h3 {
+.infoWindow {
 	text-align: center;
 }
 
-#title {
-	color: white;	
-	font-size: 22px;
+.infoWindow h4 {
+	margin-bottom: .33em;
 }
-
-
-#wrapper { 
-	/*margin-top: 5%;*/
-}
-
-select {
-	border-radius: 7px;
-	font-size: 14px;
-}
-
-#typeFilter {
-	display: inline-block;
-}
-
-#dateFilter {
-	
-}
-
-.buttons {
-	margin-bottom: 20px;
-	float:left;
-	margin: 8px;
-	margin-bottom: 20px;
-}
-
-#menu {
-	margin: 2.5px;
-}
-
-a { text-decoration: none; color:black; }
-a:visited { text-decoration: none; color: black; }
-a:hover { text-decoration: none; }
-a:focus { text-decoration: none; }
-a:hover, a:active { text-decoration: none; }
-
-#nearMe {
-	border-radius: 7px;
-	background-color: white;
-	border-width: 1px;
-}
-
-

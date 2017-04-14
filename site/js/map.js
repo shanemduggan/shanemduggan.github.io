@@ -33,7 +33,10 @@ function placeMarkers(events) {
 				animation : google.maps.Animation.DROP
 			});
 
-			var contentString = "<html><body><div><p><h4>" + events[i].name + "</h4>" + events[i].date + "<br>" + events[i].locationName + "</p></div></body></html>";
+			// <a target="_blank" href="https://www.w3schools.com">Visit W3Schools.com!</a>
+			// var contentString = "<html><body><div class='infoWindow'><p><h4><a target='_blank' href='" + events[i].detailPage + "'>" + events[i].name + "</a></h4>" + events[i].date + "<br>" + events[i].locationName + "</p></div></body></html>";
+			var contentString = "<html><body><div class='infoWindow'><p><h4><a target='_blank' href='" + events[i].detailPage + "'>" + events[i].name + "</a></h4>" + events[i].locationName + "<br>" + events[i].date + "</p></div></body></html>";
+
 			var infowindow = new google.maps.InfoWindow({
 				content : contentString
 			});
@@ -43,7 +46,9 @@ function placeMarkers(events) {
 			});
 
 			marker.addListener('mouseout', function() {
-				infowindow.close();
+				setTimeout(function() {
+					infowindow.close();
+				}, 2000);
 			});
 
 			markers.push(marker);
