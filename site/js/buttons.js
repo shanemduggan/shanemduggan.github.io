@@ -38,8 +38,24 @@ function setUpFilters() {
 			placeMarkers(dateTypeEvents);
 			updateSideBar(typeVal + ' for ' + dateVal, dateTypeEvents);
 		} else if (typeIndex == 0 && dateIndex != 0) {
-			placeMarkers(cachedDateEvents);
-			updateSideBar(dateVal, cachedDateEvents);
+			if (cachedDateEvents.length) {
+				placeMarkers(cachedDateEvents);
+				updateSideBar(dateVal, cachedDateEvents);
+			} else {
+				dateEvents = _.filter(eventData, function(e) {
+					return e.date == dateVal;
+				});
+
+				if (dateEvents.length && locationData.length) {
+					for (var i = 0; i < dateEvents.length; i++) {
+						// cache date filtered events for later use
+						cachedDateEvents.push(getLocation(dateEvents[i]));
+					}
+				}
+
+				placeMarkers(cachedDateEvents);
+				updateSideBar(dateVal, cachedDateEvents);
+			}
 		}
 	});
 
@@ -82,6 +98,17 @@ function setUpFilters() {
 			placeMarkers(typeDateEvents);
 			updateSideBar(typeVal + ' for ' + dateVal, typeDateEvents);
 		} else if (dateIndex == 0 && typeIndex != 0) {
+			// if cachedTypeEvents is empty
+			if (cachedTypeEvents.length) {
+				placeMarkers(cachedTypeEvents);
+				updateSideBar(typeVal, cachedTypeEvents);
+			} else {
+				for (var i = 0; i < eventData.length; i++) {
+					if (eventData[i].type && typeVal == getFilterOption(eventData[i].type))
+						// cache type filtered events for later use
+						cachedTypeEvents.push(getLocation(eventData[i]));
+				}
+			}
 			placeMarkers(cachedTypeEvents);
 			updateSideBar(typeVal, cachedTypeEvents);
 		}
