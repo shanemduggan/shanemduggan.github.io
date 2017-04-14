@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>HereSay Proto</title>
 		<link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<link rel="stylesheet" type="text/css" href="site/css/main.css">
 	</head>
 	<body>
 
@@ -17,9 +17,7 @@
 			<div id="sidePanel">
 				<ul></ul>
 			</div>
-			<!--<div id="google_map">-->
 			<div id="mapContainer"></div>
-			<!--</div>-->
 		</div>
 
 		<!-- <div class="buttons">
@@ -37,7 +35,7 @@
 		<div id="typeFilter" class="buttons">
 			<select id="selectType">
 				<option value="0" selected="selected">Select an event type</option>
-				<!-- <option value="1">Show all</option> -->
+				<option value="1">Theater</option>
 				<option value="2">Art</option>
 				<option value="3">Food & Drink</option>
 				<option value="4">Comedy</option>
@@ -50,6 +48,7 @@
 				<option value="11">Educational</option>
 				<option value="12">Outdoors</option>
 				<!-- <option value="13">Nature</option> -->
+				<option value="13">Museum</option>
 				<option value="14">Health</option>
 				<option value="15">Holidays</option>
 				<option value="16">Miscellaneous</option>
@@ -59,10 +58,8 @@
 		<div id="dateFilter" class="buttons">
 			<select id="selectDate">
 				<option value="0" selected="selected">Select a date</option>
-				<!-- <option value="1">Show all</option> -->
 			</select>
 		</div>
-		<!-- <br><br><br> -->
 
 		<div id="show-data" class="containers" style="display:none"></div>
 		<div style="float: right;" id="user-data" class="containers" style="display:none">
@@ -73,14 +70,14 @@
 			</div>
 		</div>
 
-		<script src="libs/underscore-min.js"></script>
+		<script src="site/libs/underscore-min.js"></script>
 		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcIb1KF-PhD_-R1NkUiuWpMhftyrJlQck"></script>
-		<script src="js/map.js"></script>
-		<script src="js/utility.js"></script>
-		<script src="js/sorting.js"></script>
-		<script src="js/buttons.js"></script>
-		<script src="js/index.js"></script>
+		<script src="site/js/map.js"></script>
+		<script src="site/js/utility.js"></script>
+		<script src="site/js/sorting.js"></script>
+		<script src="site/js/buttons.js"></script>
+		<script src="site/js/index.js"></script>
 	</body>
 </html>
 
