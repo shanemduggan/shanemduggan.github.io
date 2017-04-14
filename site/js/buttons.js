@@ -7,6 +7,7 @@ function setUpFilters() {
 		var dateIndex = $('#dateFilter select').val();
 		var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
 		clearMarkers();
+		returnMapState();
 
 		// if type or date are not selected
 		if (typeIndex == 0 && dateIndex == 0) {
@@ -65,6 +66,7 @@ function setUpFilters() {
 		var typeIndex = $('#typeFilter select').val();
 		var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
 		clearMarkers();
+		returnMapState();
 
 		// if date or type are not selected
 		if (dateIndex == 0 && typeIndex == 0) {
@@ -150,7 +152,7 @@ function nearMeButton() {
 					map : map,
 					animation : google.maps.Animation.DROP
 				});
-				
+
 				map.panTo(userMarker.position);
 				map.setZoom(13);
 				userMarker.setMap(null);
@@ -170,6 +172,24 @@ function nearMeButton() {
 			});
 		}
 	}
+}
+
+function returnMapState() {
+	var losAngeles = {
+		lat : 34.0416,
+		lng : -118.328661
+	}
+
+	var centerLoc = new window.google.maps.LatLng(losAngeles.lat, losAngeles.lng);
+	var centerMarker = new google.maps.Marker({
+		position : centerLoc,
+		map : map,
+		animation : google.maps.Animation.DROP
+	});
+
+	map.panTo(centerMarker.position);
+	map.setZoom(11);
+	centerMarker.setMap(null);
 }
 
 function getLocation(event) {
