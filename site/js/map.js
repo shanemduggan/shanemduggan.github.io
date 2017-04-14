@@ -14,6 +14,8 @@ function initMap() {
 function placeMarkers(events) {
 	//console.log(events);
 	//console.log(events.length);
+	if (markers.length)
+		console.log('before creating new markers, we have: ' + markers);
 
 	for (var i = 0; i < events.length; i++) {
 		if (!events[i].lat)
@@ -25,6 +27,8 @@ function placeMarkers(events) {
 				position : myLatlng,
 				__name : events[i].name,
 				__link : events[i].detailPage,
+				__date : events[i].date,
+				__type : events[i].type,
 				map : map,
 				animation : google.maps.Animation.DROP
 			});
@@ -46,6 +50,8 @@ function placeMarkers(events) {
 			// markers[item.index] = marker;
 		})(i);
 	}
+
+	console.log('after creating markers we have: ' + markers.length, 'should have around: ' + events.length);
 }
 
 function show(id) {

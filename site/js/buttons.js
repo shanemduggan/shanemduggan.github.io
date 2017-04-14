@@ -2,6 +2,8 @@ function setUpFilters() {
 	createDateFilterOptions();
 
 	$('#typeFilter select').change(function(e) {
+		cachedTypeEvents = [];
+		dateTypeEvents = [];
 		var typeIndex = $('#typeFilter select').val();
 		var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
 		var dateIndex = $('#dateFilter select').val();
@@ -61,6 +63,8 @@ function setUpFilters() {
 	});
 
 	$('#dateFilter select').change(function(e) {
+		cachedDateEvents = [];
+		typeDateEvents = [];
 		var dateIndex = $('#dateFilter select').val();
 		var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
 		var typeIndex = $('#typeFilter select').val();
@@ -90,6 +94,12 @@ function setUpFilters() {
 
 			placeMarkers(cachedDateEvents);
 			updateSideBar(dateVal, cachedDateEvents);
+
+			// for (var i = 0; i < cachedDateEvents.length; i++) {
+			// if (cachedDateEvents[i].date != dateVal)
+			// console.log(cachedDateEvents[i]);
+			// }
+
 		} else if (dateIndex != 0 && typeIndex != 0) {
 			// filter cached type events by date
 			console.log(cachedTypeEvents);
