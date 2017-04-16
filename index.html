@@ -34,7 +34,7 @@
 
 		<div id="typeFilter" class="buttons">
 			<select id="selectType">
-				<option value="0" selected="selected">Select an event type</option>
+				<option value="0" selected="selected">Event Type</option>
 				<option value="1">Theater</option>
 				<option value="2">Art</option>
 				<option value="3">Food & Drink</option>
@@ -57,12 +57,16 @@
 
 		<div id="dateFilter" class="buttons">
 			<select id="selectDate">
-				<option value="0" selected="selected">Select a date</option>
+				<option value="0" selected="selected">Event Date</option>
 			</select>
 		</div>
 
 		<div id="nearMeWrapper" class="buttons">
-			<button id="nearMe" onclick="nearMeButton()" type="button">Events Near Me</button>
+			<button id="nearMe" onclick="nearMeButton()" type="button">Near me</button>
+		</div>
+		
+		<div id="zoomOutWrapper" class="buttons">
+			<button id="nearMe" onclick="returnMapState()" type="button">Zoom out</button>
 		</div>
 
 		<div id="show-data" class="containers" style="display:none"></div>

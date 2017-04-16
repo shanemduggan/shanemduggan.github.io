@@ -25,10 +25,8 @@ function setUpFilters() {
 					// cache type filtered events for later use
 					cachedTypeEvents.push(getLocation(eventData[i]));
 			}
-
-			placeMarkers(cachedTypeEvents);
 			updateSideBar(typeVal, cachedTypeEvents);
-
+			placeMarkers(cachedTypeEvents);
 		} else if (typeIndex != 0 && dateIndex != 0) {
 			// if type is changed, date is selected
 			// filter cached date events by type
@@ -42,8 +40,8 @@ function setUpFilters() {
 			updateSideBar(typeVal + ' for ' + dateVal, dateTypeEvents);
 		} else if (typeIndex == 0 && dateIndex != 0) {
 			if (cachedDateEvents.length) {
-				placeMarkers(cachedDateEvents);
 				updateSideBar(dateVal, cachedDateEvents);
+				placeMarkers(cachedDateEvents);
 			} else {
 				dateEvents = _.filter(eventData, function(e) {
 					return e.date == dateVal;
@@ -55,9 +53,8 @@ function setUpFilters() {
 						cachedDateEvents.push(getLocation(dateEvents[i]));
 					}
 				}
-
-				placeMarkers(cachedDateEvents);
 				updateSideBar(dateVal, cachedDateEvents);
+				placeMarkers(cachedDateEvents);
 			}
 		}
 	});
@@ -92,8 +89,8 @@ function setUpFilters() {
 				}
 			}
 
-			placeMarkers(cachedDateEvents);
 			updateSideBar(dateVal, cachedDateEvents);
+			placeMarkers(cachedDateEvents);
 
 			// for (var i = 0; i < cachedDateEvents.length; i++) {
 			// if (cachedDateEvents[i].date != dateVal)
@@ -107,8 +104,8 @@ function setUpFilters() {
 			typeDateEvents = _.filter(cachedTypeEvents, function(e) {
 				return e.date == dateVal;
 			});
-			placeMarkers(typeDateEvents);
 			updateSideBar(typeVal + ' for ' + dateVal, typeDateEvents);
+			placeMarkers(typeDateEvents);
 		} else if (dateIndex == 0 && typeIndex != 0) {
 			// if cachedTypeEvents is empty
 			if (cachedTypeEvents.length) {
@@ -121,8 +118,8 @@ function setUpFilters() {
 						cachedTypeEvents.push(getLocation(eventData[i]));
 				}
 			}
-			placeMarkers(cachedTypeEvents);
 			updateSideBar(typeVal, cachedTypeEvents);
+			placeMarkers(cachedTypeEvents);
 		}
 	});
 }
@@ -132,6 +129,7 @@ function nearMeButton() {
 	var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
 	var typeIndex = $('#typeFilter select').val();
 	var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
+	var goodMarkers = [];
 
 	if (dateIndex != 0 || typeIndex != 0) {
 		console.log(markers);
@@ -140,23 +138,23 @@ function nearMeButton() {
 		if (navigator.geolocation) {
 			// Use method getCurrentPosition to get coordinates
 			navigator.geolocation.getCurrentPosition(function(position) {
-				// Access them accordingly
+				$('#sidePanel ul').html('');
+				$('#sidePanel h3').remove();
+				$('#sidePanel').prepend('<h3>Events near you</h3>');
 				var userLatLng = new window.google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-				var goodMarkers = markers.filter(function(marker, index, array) {
-					var myLatlng = new window.google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
-					return google.maps.geometry.spherical.computeDistanceBetween(userLatLng, myLatlng) < 5000;
-				});
-
-				var badMarkers = markers.filter(function(marker, index, array) {
-					var myLatlng = new window.google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
-					return google.maps.geometry.spherical.computeDistanceBetween(userLatLng, myLatlng) > 5000;
-				});
-				// 5000 is roughly 3 miles
-
-				for (var i = 0; i < badMarkers.length; i++) {
-					badMarkers[i].setMap(null);
+				for (var key in markers) {
+					if (!markers.hasOwnProperty(key))
+						continue;
+					var myLatlng = new window.google.maps.LatLng(markers[key].getPosition().lat(), markers[key].getPosition().lng());
+					if (google.maps.geometry.spherical.computeDistanceBetween(userLatLng, myLatlng) <= 5000) {
+						var name = markers[key].__name;
+						if (markers[key].__link)
+							var link = markers[key].__link;
+						$('#sidePanel ul').append('<li><a target="_blank" href="' + link + '">' + name + '</a></li>');
+					} else
+						markers[key].setMap(null);
 				}
-
+				markers = [];
 				var userMarker = new google.maps.Marker({
 					position : userLatLng,
 					map : map,
@@ -166,71 +164,32 @@ function nearMeButton() {
 				map.panTo(userMarker.position);
 				map.setZoom(13);
 				userMarker.setMap(null);
-
-				$('#sidePanel ul').html('');
-				$('#sidePanel h3').remove();
-				$('#sidePanel').prepend('<h3>Events near you</h3>');
-
-				for (var i = 0; i < goodMarkers.length; i++) {
-					if (goodMarkers[i].__name) {
-						var name = goodMarkers[i].__name;
-						if (goodMarkers[i].__link)
-							var link = goodMarkers[i].__link;
-						$('#sidePanel ul').append('<li><a target="_blank" href="' + link + '">' + name + '</a></li>');
-					}
-				}
 			});
 		}
 	}
 }
 
-function returnMapState() {
-	var losAngeles = {
-		lat : 34.0416,
-		lng : -118.328661
-	}
-
-	var centerLoc = new window.google.maps.LatLng(losAngeles.lat, losAngeles.lng);
-	var centerMarker = new google.maps.Marker({
-		position : centerLoc,
-		map : map,
-		animation : google.maps.Animation.DROP
-	});
-
-	map.panTo(centerMarker.position);
-	map.setZoom(11);
-	centerMarker.setMap(null);
-}
-
-function getLocation(event) {
-	var locationFound = _.find(locationData, function(l) {
-		return l.location === event.locationName;
-	});
-
-	if (locationFound) {
-		event.formattedAddress = locationFound.formattedAddress;
-		event.lat = locationFound.lat;
-		event.lng = locationFound.lng;
-	}
-	return event;
-}
 
 function updateSideBar(heading, sideBarEvents) {
 	$('#sidePanel ul').html('');
 	$('#sidePanel h3').remove();
 	$('#sidePanel').prepend('<h3>' + heading + '</h3>');
 	sideBarEvents.forEach(function(e) {
+		var liFound = $("#sidePanel ul li:contains('" + e.name + "')");
+		if (liFound.length)
+			return;
 		$('#sidePanel ul').append('<li><a target="_blank" href="' + e.detailPage + '">' + e.name + '</a></li>');
 	});
-}
 
-function clearMarkers() {
-	markers.forEach(function(marker) {
-		marker.setMap(null);
+	$('#sidePanel li').mouseover(function() {
+		show(this);
 	});
 
-	markers = [];
+	$('#sidePanel li').mouseout(function() {
+		hide(this);
+	});
 }
+
 
 function createDateFilterOptions() {
 	var monthDates = getDateFilterOptions();
@@ -240,27 +199,4 @@ function createDateFilterOptions() {
 			text : monthDates[i]
 		}));
 	}
-}
-
-function checkDate() {
-	var date = new Date();
-	var utcDate = new Date(date.toUTCString());
-	utcDate.setHours(utcDate.getHours() - 8);
-	var usDate = new Date(utcDate);
-	var month = usDate.getUTCMonth() + 1;
-	month = month.toString();
-	if (month.length == 1)
-		month = '0' + month;
-	var day = usDate.getUTCDate().toString();
-	var year = usDate.getUTCFullYear().toString();
-	var newdate = month + day + year;
-	return newdate;
-}
-
-function getMonth() {
-	var date = new Date();
-	var utcDate = new Date(date.toUTCString());
-	utcDate.setHours(utcDate.getHours() - 8);
-	var usDate = new Date(utcDate);
-	return usDate.getUTCMonth() + 1;
 }

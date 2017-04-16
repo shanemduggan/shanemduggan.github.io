@@ -4,6 +4,7 @@ var undefinedLocationAddress = 0;
 var types = [];
 var eventData = [];
 var locationData = [];
+var infoWindowOpen = 0;
 
 // cached data
 var cachedDateEvents = [];
@@ -30,6 +31,19 @@ $(document).ready(function() {
 function afterDataLoaded() {
 	$('#user-data').append('<ul id="user-data-list"></ul>');
 	$("#selectDate").val('1').trigger('change');
+	$("#selectType").val('2').trigger('change');
+	
+	var browserHeight = screen.height;
+	var headerHeight = Math.ceil(browserHeight * .0338);
+	var mapHeight = Math.ceil(browserHeight * .715);
+	var buttonHeight = Math.ceil(browserHeight * .026);
+	
+	$('#menu').height(headerHeight)
+	$('#mapContainer').height(mapHeight)
+	$('#typeFilter').height(buttonHeight);
+	$('#dateFilter').height(buttonHeight);
+	$('#nearMeWrapper').height(buttonHeight);
+	
 }
 
 function getJson(eventdir, locationdir) {

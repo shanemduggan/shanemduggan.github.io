@@ -1,7 +1,14 @@
-function toTitleCase(str) {
-	return str.replace(/\w\S*/g, function(txt) {
-		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+function getLocation(event) {
+	var locationFound = _.find(locationData, function(l) {
+		return l.location === event.locationName;
 	});
+
+	if (locationFound) {
+		event.formattedAddress = locationFound.formattedAddress;
+		event.lat = locationFound.lat;
+		event.lng = locationFound.lng;
+	}
+	return event;
 }
 
 function daysInMonth(month, year) {
@@ -39,3 +46,31 @@ function getDateFilterOptions() {
 	return days;
 }
 
+function checkDate() {
+	var date = new Date();
+	var utcDate = new Date(date.toUTCString());
+	utcDate.setHours(utcDate.getHours() - 8);
+	var usDate = new Date(utcDate);
+	var month = usDate.getUTCMonth() + 1;
+	month = month.toString();
+	if (month.length == 1)
+		month = '0' + month;
+	var day = usDate.getUTCDate().toString();
+	var year = usDate.getUTCFullYear().toString();
+	var newdate = month + day + year;
+	return newdate;
+}
+
+function getMonth() {
+	var date = new Date();
+	var utcDate = new Date(date.toUTCString());
+	utcDate.setHours(utcDate.getHours() - 8);
+	var usDate = new Date(utcDate);
+	return usDate.getUTCMonth() + 1;
+}
+
+function toTitleCase(str) {
+	return str.replace(/\w\S*/g, function(txt) {
+		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+	});
+}
