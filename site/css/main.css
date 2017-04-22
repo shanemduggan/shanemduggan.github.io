@@ -18,14 +18,17 @@ html, body {
 
 #title {
 	float: left;
-	padding: 20px;
+	padding: 10px;
 	font-family: 'Roboto Slab', serif;
+	margin-top: 2.5px;
+	border-right: 1px double #000;
 }
 
 #filters {
 	float: right;
 	display: inline-block;
 	z-index: 1;
+	margin-right: 3%;
 }
 
 #filters div {
@@ -76,6 +79,12 @@ select:focus {
 	font-size: 14px;
 	font-family: 'Roboto Slab', serif;
 	text-align: center;
+}
+
+#sidebar li:hover {
+	font-size: 16px;
+	font-weight: bold;
+	cursor: default;
 }
 
 #sidebar h3 {

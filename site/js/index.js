@@ -6,6 +6,7 @@ var types = [];
 var eventData = [];
 var locationData = [];
 var infoWindowOpen = 0;
+var openInfoWindows = [];
 
 // cached data
 var cachedDateEvents = [];
@@ -55,8 +56,10 @@ function getJson(eventdir, locationdir) {
 
 function afterDataLoaded() {
 	var browserHeight = $('html').height();
-	var headerHeight = Math.ceil(browserHeight * .10);
-	var mapHeight = Math.ceil(browserHeight * .90);
+	//var headerHeight = Math.ceil(browserHeight * .10);
+	var headerHeight = Math.ceil(browserHeight * .07);
+	//var mapHeight = Math.ceil(browserHeight * .90);
+	var mapHeight = Math.ceil(browserHeight * .93);
 
 	$('#header').height(headerHeight);
 	$('#dateFilter').height(headerHeight);
@@ -116,28 +119,30 @@ function placeMarkers(events) {
 				animation : google.maps.Animation.DROP
 			});
 
-			var contentString = "<html><body><div class='infoWindow'><p><h4><a target='_blank' href='" + events[i].detailPage + "'>" + events[i].name + "</a></h4>" + events[i].locationName + "<br>" + events[i].date + "</p></div></body></html>";
+			var contentString = "<html class='infoWindow'><body><div class='infoWindow' style='text-align: center'><p><h4><a target='_blank' href='" + events[i].detailPage + "'>" + events[i].name + "</a></h4>" + events[i].locationName + "<br>" + events[i].date + "</p></div></body></html>";
 			var infowindow = new google.maps.InfoWindow({
 				content : contentString
+			});
+
+			marker.addListener('click', function() {
+				infowindow.open(map, this);
 			});
 
 			marker.addListener('mouseover', function() {
 				infoWindowOpen++;
 				infowindow.open(map, this);
+				setTimeout(function() {
+					map.panTo(marker.position);
+				}, 150);
 			});
 
 			marker.addListener('mouseout', function() {
-				if (infoWindowOpen < 5) {
-					setTimeout(function() {
-						infoWindowOpen--;
-						infowindow.close();
-					}, 3000);
-				} else {
-					setTimeout(function() {
-						infoWindowOpen--;
-						infowindow.close();
-					}, 100);
-				}
+				openInfoWindows.push(infowindow);
+				setTimeout(function() {
+					if (!($('.infoWindow:hover').length > 0))
+						openInfoWindows[0].close();
+					openInfoWindows.shift();
+				}, 1500);
 			});
 
 			google.maps.event.addListener(marker, 'click', function() {
@@ -151,6 +156,18 @@ function placeMarkers(events) {
 	console.log('after creating markers we have: ' + Object.keys(markers).length, 'should have around: ' + events.length);
 }
 
+function showMarker(ele) {
+	console.log(ele);
+	var name = $(ele).text();
+
+	if (markers[name]) {
+		map.panTo(markers[name].position);
+		map.setZoom(13);
+		//new google.maps.event.trigger(markers[name], 'click');
+		new google.maps.event.trigger(markers[name], 'mouseover');
+	}
+}
+
 function clearMarkers() {
 	if (!Object.keys(markers).length)
 		return;
@@ -162,6 +179,244 @@ function clearMarkers() {
 		markers[key].setMap(null);
 	}
 	markers = [];
+}
+
+function setUpFilters() {
+	createDateFilterOptions();
+
+	$('#typeFilter select').change(function(e) {
+		cachedTypeEvents = [];
+		dateTypeEvents = [];
+		var typeIndex = $('#typeFilter select').val();
+		var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
+		var dateIndex = $('#dateFilter select').val();
+		var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
+		clearMarkers();
+		returnMapState();
+
+		// if type or date are not selected
+		if (typeIndex == 0 && dateIndex == 0) {
+			$('#sidebar ul').html('');
+			$('#sidebar h3').remove();
+			clearMarkers();
+			return;
+		}
+
+		// if type is changed, date not selected
+		if (typeIndex != 0 && dateIndex == 0) {
+			for (var i = 0; i < eventData.length; i++) {
+				if (eventData[i].type && typeVal == getFilterOption(eventData[i].type))
+					// cache type filtered events for later use
+					cachedTypeEvents.push(getLocation(eventData[i]));
+			}
+			updateSideBar(typeVal, cachedTypeEvents);
+			placeMarkers(cachedTypeEvents);
+		} else if (typeIndex != 0 && dateIndex != 0) {
+			// if type is changed, date is selected
+			// filter cached date events by type
+			console.log(cachedDateEvents);
+			for (var i = 0; i < cachedDateEvents.length; i++) {
+				if (cachedDateEvents[i].type && typeVal == getFilterOption(cachedDateEvents[i].type))
+					dateTypeEvents.push(cachedDateEvents[i]);
+			}
+
+			placeMarkers(dateTypeEvents);
+			updateSideBar(typeVal + ' for ' + dateVal, dateTypeEvents);
+		} else if (typeIndex == 0 && dateIndex != 0) {
+			if (cachedDateEvents.length) {
+				updateSideBar(dateVal, cachedDateEvents);
+				placeMarkers(cachedDateEvents);
+			} else {
+				dateEvents = _.filter(eventData, function(e) {
+					return e.date == dateVal;
+				});
+
+				if (dateEvents.length && locationData.length) {
+					for (var i = 0; i < dateEvents.length; i++) {
+						// cache date filtered events for later use
+						cachedDateEvents.push(getLocation(dateEvents[i]));
+					}
+				}
+				updateSideBar(dateVal, cachedDateEvents);
+				placeMarkers(cachedDateEvents);
+			}
+		}
+	});
+
+	$('#dateFilter select').change(function(e) {
+		cachedDateEvents = [];
+		typeDateEvents = [];
+		var dateIndex = $('#dateFilter select').val();
+		var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
+		var typeIndex = $('#typeFilter select').val();
+		var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
+		clearMarkers();
+		returnMapState();
+
+		// if date or type are not selected
+		if (dateIndex == 0 && typeIndex == 0) {
+			$('#sidebar ul').html('');
+			$('#sidebar h3').remove();
+			clearMarkers();
+			return;
+		}
+
+		// if date is changed, type not selected
+		if (dateIndex != 0 && typeIndex == 0) {
+			dateEvents = _.filter(eventData, function(e) {
+				return e.date == dateVal;
+			});
+
+			if (dateEvents.length && locationData.length) {
+				for (var i = 0; i < dateEvents.length; i++) {
+					// cache date filtered events for later use
+					cachedDateEvents.push(getLocation(dateEvents[i]));
+				}
+			}
+
+			updateSideBar(dateVal, cachedDateEvents);
+			placeMarkers(cachedDateEvents);
+		} else if (dateIndex != 0 && typeIndex != 0) {
+			// filter cached type events by date
+			console.log(cachedTypeEvents);
+
+			typeDateEvents = _.filter(cachedTypeEvents, function(e) {
+				return e.date == dateVal;
+			});
+			updateSideBar(typeVal + ' for ' + dateVal, typeDateEvents);
+			placeMarkers(typeDateEvents);
+		} else if (dateIndex == 0 && typeIndex != 0) {
+			// if cachedTypeEvents is empty
+			if (cachedTypeEvents.length) {
+				placeMarkers(cachedTypeEvents);
+				updateSideBar(typeVal, cachedTypeEvents);
+			} else {
+				for (var i = 0; i < eventData.length; i++) {
+					if (eventData[i].type && typeVal == getFilterOption(eventData[i].type))
+						// cache type filtered events for later use
+						cachedTypeEvents.push(getLocation(eventData[i]));
+				}
+			}
+			updateSideBar(typeVal, cachedTypeEvents);
+			placeMarkers(cachedTypeEvents);
+		}
+	});
+}
+
+function updateSideBar(heading, sideBarEvents) {
+	$('#sidebar ul').html('');
+	$('#sidebar h3').remove();
+	$('#sidebar').prepend('<h3>' + heading + '</h3>');
+	sideBarEvents.forEach(function(e) {
+		var liFound = $("#sidebar ul li:contains('" + e.name + "')");
+		if (liFound.length)
+			return;
+		$('#sidebar ul').append('<li>' + e.name + '</li>');
+	});
+
+	$('#sidebar li').click(function() {
+		showMarker(this);
+	});
+}
+
+function createDateFilterOptions() {
+	var monthDates = getDateFilterOptions();
+	for (var i = 0; i < monthDates.length; i++) {
+		$('#dateFilter select').append($('<option>', {
+			value : i + 1,
+			text : monthDates[i]
+		}));
+	}
+}
+
+function getLocation(event) {
+	var locationFound = _.find(locationData, function(l) {
+		return l.location === event.locationName;
+	});
+
+	if (locationFound) {
+		event.formattedAddress = locationFound.formattedAddress;
+		event.lat = locationFound.lat;
+		event.lng = locationFound.lng;
+	}
+	return event;
+}
+
+function returnMapState() {
+	var centerLoc = new window.google.maps.LatLng(34.0416, -118.328661);
+	var centerMarker = new google.maps.Marker({
+		position : centerLoc,
+		map : map,
+		animation : google.maps.Animation.DROP
+	});
+
+	map.panTo(centerMarker.position);
+	map.setZoom(11);
+	centerMarker.setMap(null);
+}
+
+function daysInMonth(month, year) {
+	return new Date(year, month, 0).getDate();
+}
+
+function getDateFilterOptions() {
+	var year = 2017;
+	var currentMonth = new Date().getMonth() + 1;
+	var currentDay = new Date().getDate();
+	var daysInCurrentMonth = daysInMonth(currentMonth, year);
+	var days = [];
+	var monthsArray = [];
+
+	monthsArray[0] = 'January';
+	monthsArray[1] = 'February';
+	monthsArray[2] = 'March';
+	monthsArray[3] = 'April';
+	monthsArray[4] = 'May';
+	monthsArray[5] = 'June';
+	monthsArray[6] = 'July';
+	monthsArray[7] = 'August';
+	monthsArray[8] = 'September';
+	monthsArray[9] = 'October';
+	monthsArray[10] = 'November';
+	monthsArray[11] = 'December';
+
+	var date = new Date();
+	var monthName = monthsArray[date.getMonth()];
+
+	for (var i = currentDay; i < daysInCurrentMonth + 1; i++) {
+		days.push(monthName + ' ' + i);
+	}
+
+	return days;
+}
+
+function checkDate() {
+	var date = new Date();
+	var utcDate = new Date(date.toUTCString());
+	utcDate.setHours(utcDate.getHours() - 8);
+	var usDate = new Date(utcDate);
+	var month = usDate.getUTCMonth() + 1;
+	month = month.toString();
+	if (month.length == 1)
+		month = '0' + month;
+	var day = usDate.getUTCDate().toString();
+	var year = usDate.getUTCFullYear().toString();
+	var newdate = month + day + year;
+	return newdate;
+}
+
+function getMonth() {
+	var date = new Date();
+	var utcDate = new Date(date.toUTCString());
+	utcDate.setHours(utcDate.getHours() - 8);
+	var usDate = new Date(utcDate);
+	return usDate.getUTCMonth() + 1;
+}
+
+function toTitleCase(str) {
+	return str.replace(/\w\S*/g, function(txt) {
+		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+	});
 }
 
 function getFilterOption(type) {
@@ -234,253 +489,3 @@ function getFilterOption(type) {
 	else
 		return "Miscellaneous";
 }
-
-function setUpFilters() {
-	createDateFilterOptions();
-
-	$('#typeFilter select').change(function(e) {
-		cachedTypeEvents = [];
-		dateTypeEvents = [];
-		var typeIndex = $('#typeFilter select').val();
-		var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
-		var dateIndex = $('#dateFilter select').val();
-		var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
-		clearMarkers();
-		//returnMapState();
-
-		// if type or date are not selected
-		if (typeIndex == 0 && dateIndex == 0) {
-			$('#sidebar ul').html('');
-			$('#sidebar h3').remove();
-			clearMarkers();
-			return;
-		}
-
-		// if type is changed, date not selected
-		if (typeIndex != 0 && dateIndex == 0) {
-			for (var i = 0; i < eventData.length; i++) {
-				if (eventData[i].type && typeVal == getFilterOption(eventData[i].type))
-					// cache type filtered events for later use
-					cachedTypeEvents.push(getLocation(eventData[i]));
-			}
-			updateSideBar(typeVal, cachedTypeEvents);
-			placeMarkers(cachedTypeEvents);
-		} else if (typeIndex != 0 && dateIndex != 0) {
-			// if type is changed, date is selected
-			// filter cached date events by type
-			console.log(cachedDateEvents);
-			for (var i = 0; i < cachedDateEvents.length; i++) {
-				if (cachedDateEvents[i].type && typeVal == getFilterOption(cachedDateEvents[i].type))
-					dateTypeEvents.push(cachedDateEvents[i]);
-			}
-
-			placeMarkers(dateTypeEvents);
-			updateSideBar(typeVal + ' for ' + dateVal, dateTypeEvents);
-		} else if (typeIndex == 0 && dateIndex != 0) {
-			if (cachedDateEvents.length) {
-				updateSideBar(dateVal, cachedDateEvents);
-				placeMarkers(cachedDateEvents);
-			} else {
-				dateEvents = _.filter(eventData, function(e) {
-					return e.date == dateVal;
-				});
-
-				if (dateEvents.length && locationData.length) {
-					for (var i = 0; i < dateEvents.length; i++) {
-						// cache date filtered events for later use
-						cachedDateEvents.push(getLocation(dateEvents[i]));
-					}
-				}
-				updateSideBar(dateVal, cachedDateEvents);
-				placeMarkers(cachedDateEvents);
-			}
-		}
-	});
-
-	$('#dateFilter select').change(function(e) {
-		cachedDateEvents = [];
-		typeDateEvents = [];
-		var dateIndex = $('#dateFilter select').val();
-		var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
-		var typeIndex = $('#typeFilter select').val();
-		var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
-		clearMarkers();
-		//returnMapState();
-
-		// if date or type are not selected
-		if (dateIndex == 0 && typeIndex == 0) {
-			$('#sidebar ul').html('');
-			$('#sidebar h3').remove();
-			clearMarkers();
-			return;
-		}
-
-		// if date is changed, type not selected
-		if (dateIndex != 0 && typeIndex == 0) {
-			dateEvents = _.filter(eventData, function(e) {
-				return e.date == dateVal;
-			});
-
-			if (dateEvents.length && locationData.length) {
-				for (var i = 0; i < dateEvents.length; i++) {
-					// cache date filtered events for later use
-					cachedDateEvents.push(getLocation(dateEvents[i]));
-				}
-			}
-
-			updateSideBar(dateVal, cachedDateEvents);
-			placeMarkers(cachedDateEvents);
-		} else if (dateIndex != 0 && typeIndex != 0) {
-			// filter cached type events by date
-			console.log(cachedTypeEvents);
-
-			typeDateEvents = _.filter(cachedTypeEvents, function(e) {
-				return e.date == dateVal;
-			});
-			updateSideBar(typeVal + ' for ' + dateVal, typeDateEvents);
-			placeMarkers(typeDateEvents);
-		} else if (dateIndex == 0 && typeIndex != 0) {
-			// if cachedTypeEvents is empty
-			if (cachedTypeEvents.length) {
-				placeMarkers(cachedTypeEvents);
-				updateSideBar(typeVal, cachedTypeEvents);
-			} else {
-				for (var i = 0; i < eventData.length; i++) {
-					if (eventData[i].type && typeVal == getFilterOption(eventData[i].type))
-						// cache type filtered events for later use
-						cachedTypeEvents.push(getLocation(eventData[i]));
-				}
-			}
-			updateSideBar(typeVal, cachedTypeEvents);
-			placeMarkers(cachedTypeEvents);
-		}
-	});
-}
-
-function updateSideBar(heading, sideBarEvents) {
-	$('#sidebar ul').html('');
-	$('#sidebar h3').remove();
-	$('#sidebar').prepend('<h3>' + heading + '</h3>');
-	sideBarEvents.forEach(function(e) {
-		var liFound = $("#sidebar ul li:contains('" + e.name + "')");
-		if (liFound.length)
-			return;
-		$('#sidebar ul').append('<li>' + e.name + '</li>');
-	});
-}
-
-function createDateFilterOptions() {
-	var monthDates = getDateFilterOptions();
-	for (var i = 0; i < monthDates.length; i++) {
-		$('#dateFilter select').append($('<option>', {
-			value : i + 1,
-			text : monthDates[i]
-		}));
-	}
-}
-
-function getLocation(event) {
-	var locationFound = _.find(locationData, function(l) {
-		return l.location === event.locationName;
-	});
-
-	if (locationFound) {
-		event.formattedAddress = locationFound.formattedAddress;
-		event.lat = locationFound.lat;
-		event.lng = locationFound.lng;
-	}
-	return event;
-}
-
-function daysInMonth(month, year) {
-	return new Date(year, month, 0).getDate();
-}
-
-function getDateFilterOptions() {
-	var year = 2017;
-	var currentMonth = new Date().getMonth() + 1;
-	var currentDay = new Date().getDate();
-	var daysInCurrentMonth = daysInMonth(currentMonth, year);
-	var days = [];
-	var monthsArray = [];
-
-	monthsArray[0] = 'January';
-	monthsArray[1] = 'February';
-	monthsArray[2] = 'March';
-	monthsArray[3] = 'April';
-	monthsArray[4] = 'May';
-	monthsArray[5] = 'June';
-	monthsArray[6] = 'July';
-	monthsArray[7] = 'August';
-	monthsArray[8] = 'September';
-	monthsArray[9] = 'October';
-	monthsArray[10] = 'November';
-	monthsArray[11] = 'December';
-
-	var date = new Date();
-	var monthName = monthsArray[date.getMonth()];
-
-	for (var i = currentDay; i < daysInCurrentMonth + 1; i++) {
-		days.push(monthName + ' ' + i);
-	}
-
-	return days;
-}
-
-function checkDate() {
-	var date = new Date();
-	var utcDate = new Date(date.toUTCString());
-	utcDate.setHours(utcDate.getHours() - 8);
-	var usDate = new Date(utcDate);
-	var month = usDate.getUTCMonth() + 1;
-	month = month.toString();
-	if (month.length == 1)
-		month = '0' + month;
-	var day = usDate.getUTCDate().toString();
-	var year = usDate.getUTCFullYear().toString();
-	var newdate = month + day + year;
-	return newdate;
-}
-
-function getMonth() {
-	var date = new Date();
-	var utcDate = new Date(date.toUTCString());
-	utcDate.setHours(utcDate.getHours() - 8);
-	var usDate = new Date(utcDate);
-	return usDate.getUTCMonth() + 1;
-}
-
-function toTitleCase(str) {
-	return str.replace(/\w\S*/g, function(txt) {
-		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-	});
-}
-
-//function updateSideBar(heading, sideBarEvents) {
-// $('#sidePanel li').mouseover(function() {
-// show(this);
-// });
-//
-// $('#sidePanel li').mouseout(function() {
-// hide(this);
-// });
-//
-// $('#sidePanel li').click(function() {
-// addToPersonalMap(this);
-// flashTab();
-// });
-//}
-
-// function openCity(evt, cityName) {
-// var buttonText = $('.tablinks').text();
-// console.log(buttonText);
-// if (buttonText == "My Map") {
-// $('#mapContainer').hide();
-// $('#personalMap').show();
-// $('.tablinks').text('General Map');
-// } else {
-// $('#mapContainer').show();
-// $('#personalMap').hide();
-// $('.tablinks').text('My Map');
-// }
-// }
