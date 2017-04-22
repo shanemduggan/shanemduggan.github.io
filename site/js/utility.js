@@ -74,3 +74,16 @@ function toTitleCase(str) {
 		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 	});
 }
+
+// function flashTab() {
+// $('.tablinks').css('background-color', 'white');
+// $('.tablinks').css('opacity', '1.0');
+// $('.tablinks').css('color', 'black');
+// //color: black;
+// setTimeout(function() {
+// // background-color: black;   	color: white;   opacity: 0.8;
+// $('.tablinks').css('background-color', 'black');
+// $('.tablinks').css('opacity', '0.8');
+// $('.tablinks').css('color', 'white');
+// }, 500);
+// }

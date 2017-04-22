@@ -2,90 +2,57 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>HereSay Proto</title>
+		<title>HereSay</title>
 		<link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="site/css/main.css">
+		<script src="site/libs/underscore-min.js"></script>
+		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcIb1KF-PhD_-R1NkUiuWpMhftyrJlQck&libraries=geometry"></script>
 	</head>
 	<body>
 
-		<div id="menu">
-			<h2 id='title'>HereSay</h2>
-		</div>
-
-		<br>
 		<div id="wrapper">
-			<div id="sidePanel">
+			<div id="header">
+				<div id="title">
+					HereSay
+				</div>
+				<div id="filters">
+					<div id="dateFilter">
+						<select id="selectDate">
+							<option value="0" selected="selected">Date</option>
+						</select>
+					</div>
+					<div id="typeFilter">
+						<select id="selectType">
+							<option value="0" selected="selected">Type</option>
+							<option value="1">Theater</option>
+							<option value="2">Art</option>
+							<option value="3">Food & Drink</option>
+							<option value="4">Comedy</option>
+							<option value="5">Music</option>
+							<option value="6">Festivals</option>
+							<option value="7">Sports</option>
+							<option value="8">Dance</option>
+							<option value="9">Family</option>
+							<option value="10">Film & TV</option>
+							<option value="11">Educational</option>
+							<option value="12">Outdoors</option>
+							<option value="13">Museum</option>
+							<option value="14">Health</option>
+							<option value="15">Holidays</option>
+							<option value="16">Miscellaneous</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div id="map_canvas"></div>
+			<div id="sidebar">
 				<ul></ul>
 			</div>
-			<div id="mapContainer"></div>
-		</div>
+		</div
 
-		<!-- <div class="buttons">
-		<button id="hideMap" type="button">
-		Hide/Show map
-		</button>
-		</div>
-
-		<div class="buttons">
-		<button id="hideLists" type="button">
-		Hide/Show lists
-		</button>
-		</div> -->
-
-		<div id="typeFilter" class="buttons">
-			<select id="selectType">
-				<option value="0" selected="selected">Event Type</option>
-				<option value="1">Theater</option>
-				<option value="2">Art</option>
-				<option value="3">Food & Drink</option>
-				<option value="4">Comedy</option>
-				<option value="5">Music</option>
-				<option value="6">Festivals</option>
-				<option value="7">Sports</option>
-				<option value="8">Dance</option>
-				<option value="9">Family</option>
-				<option value="10">Film & TV</option>
-				<option value="11">Educational</option>
-				<option value="12">Outdoors</option>
-				<!-- <option value="13">Nature</option> -->
-				<option value="13">Museum</option>
-				<option value="14">Health</option>
-				<option value="15">Holidays</option>
-				<option value="16">Miscellaneous</option>
-			</select>
-		</div>
-
-		<div id="dateFilter" class="buttons">
-			<select id="selectDate">
-				<option value="0" selected="selected">Event Date</option>
-			</select>
-		</div>
-
-		<div id="nearMeWrapper" class="buttons">
-			<button id="nearMe" onclick="nearMeButton()" type="button">Near me</button>
-		</div>
-		
-		<div id="zoomOutWrapper" class="buttons">
-			<button id="nearMe" onclick="returnMapState()" type="button">Zoom out</button>
-		</div>
-
-		<div id="show-data" class="containers" style="display:none"></div>
-		<div style="float: right;" id="user-data" class="containers" style="display:none">
-			<div id="user-data-welcome">
-				<i>Click on an event to the
-				<br>
-				left to add it to your list</i>
-			</div>
-		</div>
-
-		<script src="site/libs/underscore-min.js"></script>
-		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-		<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcIb1KF-PhD_-R1NkUiuWpMhftyrJlQck&libraries"></script> -->
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcIb1KF-PhD_-R1NkUiuWpMhftyrJlQck&libraries=geometry"></script>
-		<script src="site/js/map.js"></script>
 		<script src="site/js/utility.js"></script>
-		<script src="site/js/sorting.js"></script>
-		<script src="site/js/buttons.js"></script>
 		<script src="site/js/index.js"></script>
 	</body>
 </html>
