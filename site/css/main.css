@@ -5,6 +5,11 @@ html, body {
 	overflow: hidden;
 }
 
+body {
+	background-image: url("../images/palmtreesbackground.jpg");
+	/* '../images/palmtreesbackground.jpg'; */
+}
+
 #wrapper {
 	width: 100%;
 	height: 100%;
@@ -13,6 +18,7 @@ html, body {
 #header {
 	width: 100%;
 	color: black;
+	background-color: white;
 }
 
 #title {
@@ -54,7 +60,6 @@ select:focus {
 }
 
 #map_canvas {
-	/*width: 79.5%;*/
 	width: 80%;
 	display: inline-block;
 	float: left;
@@ -93,11 +98,9 @@ select:focus {
 }
 
 a {
-	/*text-decoration: underline;*/
 	text-decoration: none;
 	color: black;
 	font-family: 'Roboto Slab', serif;
-	/*color: #EEDD82;*/
 }
 a:visited {
 	text-decoration: none;
@@ -113,19 +116,8 @@ a:hover, a:active {
 	text-decoration: none;
 }
 
-/*#gutter {
-	width: .5%;
-	background-color: black;
-	float: left;
-}
-
-#gutter:hover {
-	background-color: white;
-}*/
-
-.messagepop {
+/*.messagepop {
 	background-color: #FFFFFF;
-	/*border:1px solid #999999;*/
 	cursor: default;
 	display: none;
 	margin-top: 15px;
@@ -136,10 +128,9 @@ a:hover, a:active {
 	z-index: 50;
 	padding-bottom: 0px;
 	padding-right: 5px;
-	/*margin-left: 35%;*/
 	top: 52.8%;
 	right: 47%;
-}
+}*/
 
 /*.messagepop p, .messagepop.div, .messagepop h4 {
  padding-bottom: 8px;
@@ -147,7 +138,7 @@ a:hover, a:active {
  padding: 3px;
  }*/
 
-#popName {
+/*#popName {
 	font-weight: bold;
 }
 
@@ -160,9 +151,9 @@ a:hover, a:active {
 	padding: 3px;
 	margin: 0px;
 	font-family: 'Roboto Slab', serif;
-}
+}*/
 
-.close {
+/*.close {
 	float: right;
 	position: absolute;
 	bottom: 0;
@@ -173,11 +164,11 @@ a:hover, a:active {
 
 .details {
 	display: none;
-}
+}*/
 
 /*.messagepop */
 
-.arrow-up {
+/*.arrow-up {
 	z-index: 51;
 	width: 0;
 	height: 0;
@@ -188,20 +179,19 @@ a:hover, a:active {
 	top: 53.5%;
 	right: 59.5%;
 	display: none;
-}
+}*/
 
 #map_canvas.smallMap {
 	width: 400px;
 }
 
-/* css from info window example */
+/* info window */
 .gm-style-iw {
 	width: 350px !important;
 	top: 15px !important;
 	left: 0px !important;
 	background-color: #fff;
-	/*box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);*/
-	/*border: 1px solid rgba(72, 181, 233, 0.6);*/
+	/*box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);*/
 	border-radius: 2px 2px 10px 10px;
 	width: 100%;
 }
@@ -214,9 +204,7 @@ a:hover, a:active {
 	font-size: 22px;
 	font-weight: 400;
 	padding: 10px;
-	/*background-color: #48b5e9;*/
 	background-color: #EEDD82;
-	/*color: white;*/
 	color: black;
 	margin: 0;
 	border-radius: 2px 2px 0 0;
@@ -226,16 +214,11 @@ a:hover, a:active {
 	line-height: 18px;
 	font-weight: 400;
 	margin-right: 1px;
-	padding: 15px 5px 20px 15px;
+	padding: 15px 5px 10px 15px;
 	max-height: 140px;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-
-/*.iw-content img {
- float: right;
- margin: 0 5px 5px 10px;
- }*/
 
 .iw-subTitle {
 	font-size: 16px;
@@ -254,119 +237,19 @@ a:hover, a:active {
 	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
 }
 
-/* splitter */
+.fb-share-button {
+	background-color: #dfe3ee;
+}
 
-/*.gutter {
- background-color: #eee;
- background-repeat: no-repeat;
- background-position: 50%;
- }
+.fb-share-button:hover {
+	background-color: white;
+}
 
- .gutter.gutter-horizontal {
- cursor: ew-resize;
- background-image:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')
- }
+#twitterButton {
+	margin-left: 10px;
+	background-color: #dfe3ee;
+}
 
- .gutter.gutter-horizontal {
- float: left;
- }*/
-
-/*.map-mask{
- margin-top: 7%;
- height: 100%;
- width:78%;
- position: absolute;
- z-index: 1000;
- display:none;
- }*/
-
-/* general*/
-
-/*li {
- margin: 0 5px 10px 0;
- }
- body {
- /*height: 100%;
- background-image: url("../images/palmtreesbackground.jpg");
- background-size: cover;
- background-attachment: fixed;
- position: relative;
- margin: 0;
- }
-
- select {
- border-radius: 7px;
- font-size: 14px;
- }
- #typeFilter {
- display: inline-block;
- }
- #dateFilter {
- }
- .buttons {
- margin-bottom: 20px;
- float: left;
- margin: 8px;
- margin-bottom: 20px;
- }
-
- #nearMe {
- border-radius: 7px;
- background-color: white;
- border-width: 1px;
- }
- .infoWindow a:hover {
- text-decoration: underline;
- }
-
- .infoWindow {
- text-align: center;
- }
-
- .infoWindow h4 {
- margin-bottom: .33em;
- }
-
- // jquery tab example
- /* Style the tab
- div.tab {
- /*overflow: hidden;
- border: 1px solid #ccc;*/
-/*background-color: #f1f1f1;
- opacity: 0.8;
- }
-
- /* Style the buttons inside the tab
- div.tab button {
- background-color: inherit;
- /*float: left;
- border: none;
- outline: none;
- cursor: pointer;
- padding: 14px 16px;
- transition: 0.3s;
- color: white;
- background-color: black;
- text-align: center;
- }
-
- /* Change background color of buttons on hover
- div.tab button:hover {
- /*background-color: #ddd;
- background-color: white;
- opacity: 1.0;
- color: black;
- }
-
- /* Create an active/current tablink class */
-/*div.tab button.active {
- background-color: #ccc;
- }*/
-
-/* Style the tab content
- .tabcontent {
- display: none;
- padding: 6px 12px;
- border: 1px solid #ccc;
- border-top: none;
- }*/
+#twitterButton:hover {
+	background-color: white;
+}

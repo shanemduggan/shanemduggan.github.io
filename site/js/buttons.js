@@ -29,10 +29,10 @@ function setUpFilters() {
 			updateSideBar(typeVal, cachedTypeEvents);
 			placeMarkers(cachedTypeEvents);
 		} else if (typeIndex != 0 && dateIndex != 0) {
-			
+
 			// if type is changed, date is selected
 			// filter cached date events by type
-			
+
 			console.log(cachedDateEvents);
 			for (var i = 0; i < cachedDateEvents.length; i++) {
 				if (cachedDateEvents[i].type && typeVal == getFilterOption(cachedDateEvents[i].type))
@@ -130,10 +130,16 @@ function updateSideBar(heading, sideBarEvents) {
 		var liFound = $("#sidebar ul li:contains('" + e.name + "')");
 		if (liFound.length)
 			return;
-		$('#sidebar ul').append('<li><span class="name">' + e.name + '</span><span class="details">' + e.locationName + '<br><span class="eventDate">' + e.date + '</span></span></li>');
+		//$('#sidebar ul').append('<li><span class="name">' + e.name + '</span><span class="details">' + e.locationName + '<br><span class="eventDate">' + e.date + '</span></span></li>');
+		$('#sidebar ul').append('<li><span class="name">' + e.name + '</span></li>');
 	});
 
 	$('#sidebar li').click(function() {
-		showCard(this);
+		showCard(this, 'click');
 	});
+
+	$('#sidebar li').hover(function() {
+		showCard(this, 'hover');
+	});
+
 }

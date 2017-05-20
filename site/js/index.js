@@ -4,8 +4,7 @@ var undefinedLocationAddress = 0;
 var types = [];
 var eventData = [];
 var locationData = [];
-var infoWindowOpen = 0;
-var openInfoWindows = [];
+var openCards = [];
 
 var currentMonth = new Date().getMonth() + 1;
 var monthName = getMonthName(currentMonth);
@@ -50,8 +49,12 @@ function getJson(eventdir, locationdir) {
 					eventData.push(data[i]);
 			}
 		}
-		initMap();
-		afterDataLoaded();
+
+		if (locationData.length && eventData.length) {
+			initMap();
+			afterDataLoaded();
+		} else
+			$('#wrapper').hide();
 	});
 }
 
@@ -72,41 +75,29 @@ function afterDataLoaded() {
 	$("#selectDate").val('1').trigger('change');
 	$("#selectType").val('2').trigger('change');
 
-	$('.close').click(function() {
-		$('.pop').hide();
-		$('#popName').html('');
-		$('#popDateType').html('');
-		return false;
-	});
+	// $('.close').click(function() {
+	// $('.pop').hide();
+	// $('#popName').html('');
+	// $('#popDateType').html('');
+	// return false;
+	// });
 }
 
-function showCard(ele) {
+function showCard(ele, action) {
+	var name = $(ele).text();
+	if (name) {
+		var marker = markers[name];
+		if (marker) {
+			if (action == 'hover')
+				toggleDrop(marker);
+			else if (action == 'click') {
+				google.maps.event.trigger(marker, 'click');
+			}
+		} else {
+			// show card with hidden marker
 
-	$('#popName').html('');
-	$('#popDateType').html('');
-	if (ele.__name) {
-		var name = ele.__name;
-
-		if (markers[name]) {
-			$('.pop').show();
-			$('#popName').append('<a target="_blank" href="' + markers[name].__link + '">' + name + '</a>');
-			$('#popDateType').html(markers[name].__type + '<br>' + markers[name].__date);
-			$('.arrow-up').show();
-		}
-
-		// hover show pop up
-		// if mouse over on pop up, show
-		// if mouse out, hide after .5 sec
-
-	} else {
-		var name = $(ele).find(".name").text();
-		if (markers[name]) {
-			$('.pop').show();
-			$('#popName').append('<a target="_blank" href="' + markers[name].__link + '">' + name + '</a>');
-			$('#popDateType').text(markers[name].__date + ' || ' + markers[name].__type);
 		}
 	}
-
 }
 
 function createDateFilterOptions() {

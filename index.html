@@ -11,12 +11,24 @@
 		<script src="site/js/map.js"></script>
 		<script src="site/js/utility.js"></script>
 		<script src="site/js/buttons.js"></script>
-		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script> -->
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcIb1KF-PhD_-R1NkUiuWpMhftyrJlQck&libraries=geometry"></script>
 		<script src="site/js/index.js"></script>
 
 	</head>
 	<body>
+		<div id="fb-root"></div>
+		<script>
+			( function(d, s, id) {
+					var js,
+					    fjs = d.getElementsByTagName(s)[0];
+					if (d.getElementById(id))
+						return;
+					js = d.createElement(s);
+					js.id = id;
+					js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9";
+					fjs.parentNode.insertBefore(js, fjs);
+				}(document, 'script', 'facebook-jssdk'));
+		</script>
 
 		<div id="wrapper">
 			<div id="header">
@@ -52,20 +64,8 @@
 					</div>
 				</div>
 			</div>
-		
-			<div class="arrow-up"></div>
-			<div class="messagepop pop">
-				<!-- <h4 id="popName"></h4> -->
-				<p id="popName"></p>
-				<p id="popDateType"></p>
-				<p>
-					<a class="close" href="/">X</a>
-				</p>
-				<!-- share button goes here -->
-				<!-- <input type="submit" value="Send Message" name="commit" id="message_submit"/>-->
-			</div>
+
 			<div id="map_canvas"></div>
-			<!-- <div id="gutter"></div> -->
 			<div id="sidebar">
 				<ul></ul>
 			</div>
