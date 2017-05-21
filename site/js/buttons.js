@@ -131,7 +131,10 @@ function updateSideBar(heading, sideBarEvents) {
 		if (liFound.length)
 			return;
 		//$('#sidebar ul').append('<li><span class="name">' + e.name + '</span><span class="details">' + e.locationName + '<br><span class="eventDate">' + e.date + '</span></span></li>');
-		$('#sidebar ul').append('<li><span class="name">' + e.name + '</span></li>');
+		if (appType == 'mobile')
+			$('#sidebar ul').append('<li><a target="_blank" href="' + e.detailPage + '"><span class="name">' + e.name + '</span></a></li>');
+		else
+			$('#sidebar ul').append('<li><span class="name">' + e.name + '</span></li>');
 	});
 
 	$('#sidebar li').click(function() {

@@ -5,6 +5,8 @@ var types = [];
 var eventData = [];
 var locationData = [];
 var openCards = [];
+var appType = '';
+var centerMarker;
 
 var currentMonth = new Date().getMonth() + 1;
 var monthName = getMonthName(currentMonth);
@@ -50,37 +52,59 @@ function getJson(eventdir, locationdir) {
 			}
 		}
 
+		// test sorry message
+		//locationData = [];
+		//eventData = [];
+
+		if ($('html').width() <= 480)
+			appType = 'mobile';
+
 		if (locationData.length && eventData.length) {
-			initMap();
+			if (appType != 'mobile')
+				initMap();
 			afterDataLoaded();
-		} else
+		} else {
 			$('#wrapper').hide();
+			$('#sorryMessage').show();
+		}
 	});
 }
 
 function afterDataLoaded() {
 	var browserWidth = $('html').width();
 	var browserHeight = $('html').height();
-	var headerHeight = Math.ceil(browserHeight * .07);
-	var mapHeight = Math.ceil(browserHeight * .93);
 
-	$('#header').height(headerHeight);
-	$('#dateFilter').height(headerHeight);
-	$('#dateFilter select').height(headerHeight - 2);
-	$('#typeFilter').height(headerHeight);
-	$('#typeFilter select').height(headerHeight - 2);
-	$('#map_canvas').height(mapHeight);
-	$('#sidebar').height(mapHeight);
+	if (browserWidth > 480) {
+		var headerHeight = Math.ceil(browserHeight * .07);
+		var mapHeight = Math.ceil(browserHeight * .93);
 
-	$("#selectDate").val('1').trigger('change');
-	$("#selectType").val('2').trigger('change');
+		$('#header').height(headerHeight);
+		$('#dateFilter').height(headerHeight);
+		$('#dateFilter select').height(headerHeight - 2);
+		$('#typeFilter').height(headerHeight);
+		$('#typeFilter select').height(headerHeight - 2);
+		$('#map_canvas').height(mapHeight);
+		$('#sidebar').height(mapHeight);
 
-	// $('.close').click(function() {
-	// $('.pop').hide();
-	// $('#popName').html('');
-	// $('#popDateType').html('');
-	// return false;
-	// });
+		$("#selectDate").val('1').trigger('change');
+		$("#selectType").val('2').trigger('change');
+	} else {
+		$('#map_canvas').hide();
+
+		var headerHeight = Math.ceil(browserHeight * .07);
+		var sideBarHeight = Math.ceil(browserHeight * .93);
+
+		$('#header').height(headerHeight);
+		$('#sidebar').height(sideBarHeight);
+		$('#sidebar').width(browserWidth);
+		$('#dateFilter').height(headerHeight);
+		$('#dateFilter select').height(headerHeight - 2);
+		$('#typeFilter').height(headerHeight);
+		$('#typeFilter select').height(headerHeight - 2);
+
+		$("#selectDate").val('1').trigger('change');
+		$("#selectType").val('2').trigger('change');
+	}
 }
 
 function showCard(ele, action) {
@@ -93,9 +117,62 @@ function showCard(ele, action) {
 			else if (action == 'click') {
 				google.maps.event.trigger(marker, 'click');
 			}
-		} else {
+			//} else {
+		} else if (action == 'click') {
 			// show card with hidden marker
 
+			var content = '<div id="iw-container"><div class="iw-title"><a target="_blank" href="http://www.laweekly.com/event/tag-gallery-reopening-show-artists-reception-8141010">TAG Gallery Reopening Show Artists Reception</a></div><div class="iw-content"><p></p><div class="iw-subTitle">May 20 @ TAG Gallery</div><p>Art</p><button class="fb-share-button" data-href="http://www.laweekly.com/event/tag-gallery-reopening-show-artists-reception-8141010"data-layout="button_count" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank"href="https://www.facebook.com/sharer/sharer.php?u=http://www.laweekly.com/event/tag-gallery-reopening-show-artists-reception-8141010&amp;src=sdkpreparse">Share on Facebook</a></button><button id="twitterButton"><a target="_blank" href="https://twitter.com/share?url=http://www.laweekly.com/event/tag-gallery-reopening-show-artists-reception-8141010&text=Found this on HereSay - TAG Gallery Reopening Show Artists Reception"</a>Share on Twitter</button></div><div class="iw-bottom-gradient"></div></div>';
+			var infowindow = new google.maps.InfoWindow({
+				content : content,
+				maxWidth : 350
+			});
+
+			google.maps.event.addListener(map, 'click', function() {
+				infowindow.close();
+			});
+
+			google.maps.event.addListener(infowindow, 'domready', function() {
+				var iwOuter = $('.gm-style-iw');
+				var iwBackground = iwOuter.prev();
+				var iwCloseBtn = iwOuter.next();
+
+				iwBackground.children(':nth-child(2)').css({
+					'display' : 'none'
+				});
+
+				iwBackground.children(':nth-child(4)').css({
+					'display' : 'none'
+				});
+
+				iwCloseBtn.css({
+					'opacity' : '1',
+					'right' : '58px',
+					'top' : '20px',
+					'border-radius' : '13px',
+				});
+
+				// If the content of infowindow not exceed the set maximum height, then the gradient is removed.
+				if ($('.iw-content').height() < 140) {
+					$('.iw-bottom-gradient').css({
+						display : 'none'
+					});
+				}
+			});
+
+			if (openCards.length > 0) {
+				openCards[openCards.length - 1].close();
+				openCards = [];
+				setTimeout(function() {
+					infowindow.open(map, centerMarker);
+				}, 200);
+			} else if (openCards.length == 0) {
+				setTimeout(function() {
+					infowindow.open(map, centerMarker);
+				}, 200);
+			}
+
+			map.panTo(centerMarker.position);
+			openCards.push(infowindow);
 		}
 	}
 }

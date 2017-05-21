@@ -7,7 +7,6 @@ html, body {
 
 body {
 	background-image: url("../images/palmtreesbackground.jpg");
-	/* '../images/palmtreesbackground.jpg'; */
 }
 
 #wrapper {
@@ -116,71 +115,6 @@ a:hover, a:active {
 	text-decoration: none;
 }
 
-/*.messagepop {
-	background-color: #FFFFFF;
-	cursor: default;
-	display: none;
-	margin-top: 15px;
-	position: absolute;
-	text-align: left;
-	width: 27.5%;
-	height: 15%;
-	z-index: 50;
-	padding-bottom: 0px;
-	padding-right: 5px;
-	top: 52.8%;
-	right: 47%;
-}*/
-
-/*.messagepop p, .messagepop.div, .messagepop h4 {
- padding-bottom: 8px;
- text-align: left;
- padding: 3px;
- }*/
-
-/*#popName {
-	font-weight: bold;
-}
-
-#popDateType {
-	font-size: 14px;
-}
-
-.messagepop p, .messagepop.div, .messagepop {
-	text-align: left;
-	padding: 3px;
-	margin: 0px;
-	font-family: 'Roboto Slab', serif;
-}*/
-
-/*.close {
-	float: right;
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	padding-bottom: 7px;
-	padding-right: 7px;
-}
-
-.details {
-	display: none;
-}*/
-
-/*.messagepop */
-
-/*.arrow-up {
-	z-index: 51;
-	width: 0;
-	height: 0;
-	border-left: 10px solid transparent;
-	border-right: 10px solid transparent;
-	border-bottom: 10px solid white;
-	position: absolute;
-	top: 53.5%;
-	right: 59.5%;
-	display: none;
-}*/
-
 #map_canvas.smallMap {
 	width: 400px;
 }
@@ -252,4 +186,23 @@ a:hover, a:active {
 
 #twitterButton:hover {
 	background-color: white;
+}
+
+#sorryMessage {
+	width: 40%;
+	height: 40%;
+	background-color: white;
+	position: absolute;
+	top: 30%;
+	left: 30%;
+	z-index: 5;
+	display:none;
+	text-align: center;
+}
+
+#sorryMessage p {
+	padding-left: 5%;
+	padding-right: 5%;
+	margin-top: 20%;
+	font-family: 'Roboto Slab', serif;
 }
