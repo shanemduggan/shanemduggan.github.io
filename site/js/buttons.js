@@ -2,6 +2,10 @@ function setUpFilters() {
 	createDateFilterOptions();
 
 	$('#typeFilter select').change(function(e) {
+		openCards.forEach(function(card) {
+			card.close();
+		});
+
 		cachedTypeEvents = [];
 		dateTypeEvents = [];
 		var typeIndex = $('#typeFilter select').val();
@@ -33,7 +37,7 @@ function setUpFilters() {
 			// if type is changed, date is selected
 			// filter cached date events by type
 
-			console.log(cachedDateEvents);
+			//console.log(cachedDateEvents);
 			for (var i = 0; i < cachedDateEvents.length; i++) {
 				if (cachedDateEvents[i].type && typeVal == getFilterOption(cachedDateEvents[i].type))
 					dateTypeEvents.push(cachedDateEvents[i]);
@@ -63,6 +67,10 @@ function setUpFilters() {
 	});
 
 	$('#dateFilter select').change(function(e) {
+		openCards.forEach(function(card) {
+			card.close();
+		});
+		
 		cachedDateEvents = [];
 		typeDateEvents = [];
 		var dateIndex = $('#dateFilter select').val();
@@ -97,7 +105,7 @@ function setUpFilters() {
 			placeMarkers(cachedDateEvents);
 		} else if (dateIndex != 0 && typeIndex != 0) {
 			// filter cached type events by date
-			console.log(cachedTypeEvents);
+			//console.log(cachedTypeEvents);
 
 			typeDateEvents = _.filter(cachedTypeEvents, function(e) {
 				return e.date == dateVal;

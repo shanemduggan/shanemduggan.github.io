@@ -63,6 +63,8 @@ function toTitleCase(str) {
 }
 
 function getFilterOption(type) {
+	if (!type)
+		return "Miscellanous";
 	if ($.inArray(type, types) == -1) {
 		types.push(type);
 	}

@@ -138,10 +138,17 @@ a:hover, a:active {
 	font-size: 22px;
 	font-weight: 400;
 	padding: 10px;
-	background-color: #EEDD82;
+	/*background-color: #EEDD82;*/
+	/*background-color: #c8f5f3;*/
+	background: rgba(200, 245, 243, 0.6);
+	/*opacity: 0.6;*/
 	color: black;
 	margin: 0;
 	border-radius: 2px 2px 0 0;
+}
+
+.iw-title:hover {
+	opacity: 0.6;
 }
 #iw-container .iw-content {
 	font-size: 13px;
@@ -172,20 +179,36 @@ a:hover, a:active {
 }
 
 .fb-share-button {
-	background-color: #dfe3ee;
+	/*background-color: #dfe3ee;*/
+	background-color: #3B5998;
+	border-radius: 10px;
+	/*color: white;*/
+}
+
+.fb-share-button a {
+	color: white;
 }
 
 .fb-share-button:hover {
-	background-color: white;
+	/*background-color: white;*/
+	/*opacity: 0.6;*/
+	background: rgba(59, 89, 152, 0.6);
 }
 
 #twitterButton {
 	margin-left: 10px;
-	background-color: #dfe3ee;
+	/*background-color: #dfe3ee;*/
+	background-color: #4099FF;
+	border-radius: 10px;
+}
+
+#twitterButton a {
+	color: white;
 }
 
 #twitterButton:hover {
-	background-color: white;
+	/*background-color: white;*/
+	background: rgba(64, 153, 255, 0.6);
 }
 
 #sorryMessage {
@@ -196,7 +219,7 @@ a:hover, a:active {
 	top: 30%;
 	left: 30%;
 	z-index: 5;
-	display:none;
+	display: none;
 	text-align: center;
 }
 

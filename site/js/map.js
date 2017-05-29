@@ -70,11 +70,12 @@ function placeMarkers(events) {
 			events[i].type = getFilterOption(events[i].type);
 			var type = '<p>' + events[i].type + '</p>';
 
-			var fbShare = '<button class="fb-share-button" data-href="' + events[i].detailPage + '"' + 'data-layout="button_count" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank"' + 'href="https://www.facebook.com/sharer/sharer.php?u=' + events[i].detailPage + '&amp;src=sdkpreparse">Share on Facebook</a></button>';
+			var fbShare = '<button class="fb-share-button" data-href="' + events[i].detailPage + '"' + 'data-layout="button_count" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank"' + 'href="https://www.facebook.com/sharer/sharer.php?u=' + events[i].detailPage + '&amp;src=sdkpreparse">Share</a></button>';
 
 			var lengthOfTweet = events[i].detailPage.length + events[i].name.length + 25;
-			var twitterShare = '<button id="twitterButton"><a target="_blank" href="https://twitter.com/share?url=' + events[i].detailPage + '&text=Found this on HereSay - ' + events[i].name + '"</a>Share on Twitter</button>';
-			var content = '<div id="iw-container">' + title + '<div class="iw-content">' + '<p></p>' + date + type + fbShare + twitterShare + '</div>' + '<div class="iw-bottom-gradient"></div>' + '</div>';
+			var twitterShare = '<button id="twitterButton"><a target="_blank" href="https://twitter.com/share?url=' + events[i].detailPage + '&text=Found this on HereSay - ' + events[i].name + '"</a>Tweet</button>';
+			//var content = '<div id="iw-container">' + title + '<div class="iw-content">' + '<p></p>' + date + type + fbShare + twitterShare + '</div>' + '<div class="iw-bottom-gradient"></div>' + '</div>';
+			var content = '<div id="iw-container">' + title + '<div class="iw-content">' + date + '<br/><p>' + fbShare + twitterShare + '</p></div></div>';
 
 			var infowindow = new google.maps.InfoWindow({
 				content : content,
@@ -99,9 +100,9 @@ function placeMarkers(events) {
 				infowindow.close();
 			});
 
-			marker.addListener('mouseover', function() {
-				toggleBounce(marker);
-			});
+			// marker.addListener('mouseover', function() {
+				// toggleBounce(marker);
+			// });
 
 			google.maps.event.addListener(infowindow, 'domready', function() {
 				var iwOuter = $('.gm-style-iw');
@@ -139,19 +140,12 @@ function placeMarkers(events) {
 }
 
 function toggleBounce(marker) {
-	// if (marker.getAnimation() !== null) {
-	// marker.setAnimation(null);
-	// } else {
-	// marker.setAnimation(google.maps.Animation.BOUNCE);
-	// }
-
 	marker.setAnimation(google.maps.Animation.BOUNCE);
 	var interval = 700 * (Math.floor(Math.random() * 5) + 1);
 
 	setTimeout(function() {
 		marker.setAnimation(null);
 	}, interval);
-	//}, 1400);
 }
 
 function toggleDrop(marker) {
