@@ -4,6 +4,7 @@ var undefinedLocationAddress = 0;
 var types = [];
 var eventData = [];
 var locationData = [];
+var historicLocData = [];
 var openCards = [];
 var appType = '';
 var centerMarker;
@@ -24,8 +25,9 @@ var dateTypeEvents = [];
 var typeDateEvents = [];
 
 $(window).on('load', function() {
-	var eventdir = '../data/crawldata/' + monthName + '/mayEvents.json';
-	var locationdir = '../data/locationdata/mayLocationsGeo.json';
+	//var eventdir = '../data/crawldata/' + monthName + '/' + monthName + 'Events.json';
+	var eventdir = '../data/crawldata/june/juneEvents.json';
+	var locationdir = '../data/locationdata/' + monthName + 'LocationsGeo.json';
 	getJson(eventdir, locationdir);
 	setUpFilters();
 });
@@ -38,6 +40,13 @@ function getJson(eventdir, locationdir) {
 		}
 	});
 
+	$.getJSON('../data/locationdata/allLocationsGeo.json', function(data) {
+		if (data.length) {
+			console.log('# of historic locations: ' + data.length);
+			historicLocData = data;
+		}
+	});
+
 	$.getJSON(eventdir, function(data) {
 		var filteredData = [];
 
@@ -47,7 +56,7 @@ function getJson(eventdir, locationdir) {
 					data[i].date = data[i].date.split('-')[0];
 				}
 
-				if (parseInt(data[i].date.match(/\d+/)) >= new Date().getDate())
+				if (parseInt(data[i].date.match(/\d+/)[0]) >= new Date().getDate())
 					eventData.push(data[i]);
 			}
 		}
@@ -68,6 +77,7 @@ function getJson(eventdir, locationdir) {
 			$('#sorryMessage').show();
 		}
 	});
+
 }
 
 function afterDataLoaded() {
@@ -205,7 +215,19 @@ function getLocation(event) {
 		event.formattedAddress = locationFound.formattedAddress;
 		event.lat = locationFound.lat;
 		event.lng = locationFound.lng;
+	} else {
+		console.log(event);
+		var historiclocationFound = _.find(historicLocData, function(l) {
+			return l.location === event.locationName;
+		});
+		if (historiclocationFound) {
+			event.formattedAddress = historiclocationFound.formattedAddress;
+			event.lat = historiclocationFound.lat;
+			event.lng = historiclocationFound.lng;
+		} else
+			console.log(event);
 	}
+
 	return event;
 }
 

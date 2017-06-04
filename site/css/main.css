@@ -229,3 +229,12 @@ a:hover, a:active {
 	margin-top: 20%;
 	font-family: 'Roboto Slab', serif;
 }
+
+@media handheld {
+	/*Here goes the CSS for mobile phones and tablets*/
+
+	#map_canvas {
+		display: none;
+	}
+}
+

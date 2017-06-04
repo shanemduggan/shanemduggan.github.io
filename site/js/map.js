@@ -43,6 +43,18 @@ function placeMarkers(events) {
 	for (var i = 0; i < events.length; i++) {
 		if (!events[i].lat)
 			continue;
+		var event = events[i];
+		// var location = _.find(locationData, function(l) {
+		// return l.address == event.address;
+		// });
+
+		//if (location)
+		//	console.log(location);
+		//if (event.lat)
+		//	console.log(event.address);
+
+		//if (!location)
+		//	continue;
 
 		(function(i) {
 			var myLatlng = new google.maps.LatLng(events[i].lat, events[i].lng);
@@ -101,7 +113,7 @@ function placeMarkers(events) {
 			});
 
 			// marker.addListener('mouseover', function() {
-				// toggleBounce(marker);
+			// toggleBounce(marker);
 			// });
 
 			google.maps.event.addListener(infowindow, 'domready', function() {
