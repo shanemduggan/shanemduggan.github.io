@@ -65,7 +65,10 @@ function getJson(eventdir, locationdir) {
 		//locationData = [];
 		//eventData = [];
 
-		if ($('html').width() <= 480)
+		//if ($('html').width() <= 480)
+		//	appType = 'mobile';
+
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
 			appType = 'mobile';
 
 		if (locationData.length && eventData.length) {
@@ -84,7 +87,7 @@ function afterDataLoaded() {
 	var browserWidth = $('html').width();
 	var browserHeight = $('html').height();
 
-	if (browserWidth > 480) {
+	if (appType != 'mobile') {
 		var headerHeight = Math.ceil(browserHeight * .07);
 		var mapHeight = Math.ceil(browserHeight * .93);
 
