@@ -7,6 +7,8 @@ html, body {
 
 body {
 	background-image: url("../images/palmtreesbackground.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 #wrapper {
@@ -230,11 +232,10 @@ a:hover, a:active {
 	font-family: 'Roboto Slab', serif;
 }
 
-@media handheld {
-	/*Here goes the CSS for mobile phones and tablets*/
-
-	#map_canvas {
-		display: none;
-	}
+.mobile {
+	padding-bottom: 25px !important;
 }
 
+.mobile:hover {
+	font-weight: bold;
+}

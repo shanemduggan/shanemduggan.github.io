@@ -117,6 +117,7 @@ function afterDataLoaded() {
 
 		$("#selectDate").val('1').trigger('change');
 		$("#selectType").val('2').trigger('change');
+		
 	}
 }
 

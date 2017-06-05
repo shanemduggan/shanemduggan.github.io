@@ -144,6 +144,9 @@ function updateSideBar(heading, sideBarEvents) {
 		else
 			$('#sidebar ul').append('<li><span class="name">' + e.name + '</span></li>');
 	});
+	
+	if (appType == 'mobile')
+		return;
 
 	$('#sidebar li').click(function() {
 		showCard(this, 'click');
