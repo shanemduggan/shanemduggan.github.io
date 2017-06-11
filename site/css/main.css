@@ -163,9 +163,16 @@ a:hover, a:active {
 	overflow-x: hidden;
 }
 
+#iw-container span {
+	font-size: 14px;
+	/*font-family: 'Open Sans Condensed', sans-serif;*/
+	font-weight: 200;
+}
+
 .iw-subTitle {
 	font-size: 16px;
-	font-weight: 700;
+	/*font-weight: 700;*/
+	font-weight: 200;
 	padding: 5px 0;
 }
 .iw-bottom-gradient {
@@ -185,6 +192,10 @@ a:hover, a:active {
 	background-color: #3B5998;
 	border-radius: 10px;
 	/*color: white;*/
+	float: right;
+	margin-right: 2px;
+	box-shadow: 2px 2px 2px #000;
+	border: none;
 }
 
 .fb-share-button a {
@@ -202,6 +213,10 @@ a:hover, a:active {
 	/*background-color: #dfe3ee;*/
 	background-color: #4099FF;
 	border-radius: 10px;
+	float: right;
+	margin-right: 10px;
+		box-shadow: 2px 2px 2px #000;
+	border: none;
 }
 
 #twitterButton a {

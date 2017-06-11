@@ -122,6 +122,7 @@ function afterDataLoaded() {
 }
 
 function showCard(ele, action) {
+	console.log(map.getCenter());
 	var name = $(ele).text();
 	if (name) {
 		var marker = markers[name];
@@ -143,7 +144,7 @@ function showCard(ele, action) {
 
 			var fbButton = '<button class="fb-share-button" data-href="' + event.detailPage + '"data-layout="button_count" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank"href="https://www.facebook.com/sharer/sharer.php?u=' + event.detailPage + '&amp;src=sdkpreparse">Share</a></button>';
 			var twitterButton = '<button id="twitterButton"><a target="_blank" href="https://twitter.com/share?url=' + event.detailPage + '&text=Found this on HereSay - ' + name + '"</a>Tweet</button>';
-			var content = '<div id="iw-container"><div class="iw-title"><a target="_blank" href="' + event.detailPage + '">' + name + '</a></div><div class="iw-content"><div class="iw-subTitle">' + event.date + ' @ ' + event.locationName + '</div><br/><p>' + fbButton + twitterButton + '</p></div></div>';
+			var content = '<div id="iw-container"><div class="iw-title"><a target="_blank" href="' + event.detailPage + '">' + name + '</a></div><div class="iw-content"><div class="iw-subTitle">' + event.date + fbButton + twitterButton + '</div><br/><p>' + event.locationName + '</p></div></div>';
 
 			var infowindow = new google.maps.InfoWindow({
 				content : content,

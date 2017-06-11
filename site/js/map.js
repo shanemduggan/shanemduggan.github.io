@@ -6,8 +6,8 @@ function initMap() {
 	map = new google.maps.Map(document.getElementById('map_canvas'), {
 		zoom : 11,
 		center : {
-			lat : 34.0416,
-			lng : -118.328661
+			lat : 34.088712,
+			lng : -118.389514
 		},
 		mapTypeControl : false
 	});
@@ -73,12 +73,13 @@ function placeMarkers(events) {
 			});
 
 			if (events[i].name.length > 50) {
-				var fullName = events[i].name; events[i].name.replace(/^(.{50}[^\s]*).*/, "$1") + "\n";
+				var fullName = events[i].name;
+				events[i].name.replace(/^(.{50}[^\s]*).*/, "$1") + "\n";
 				var title = '<div class="iw-title" title="' + fullName + '"><a target="_blank" href="' + events[i].detailPage + '">' + events[i].name + '</a></div>';
 			} else
 				var title = '<div class="iw-title"><a target="_blank" href="' + events[i].detailPage + '">' + events[i].name + '</a></div>';
 
-			var date = '<div class="iw-subTitle">' + events[i].date + ' @ ' + events[i].locationName + '</div>';
+			//var date = '<div class="iw-subTitle">' + events[i].date + ' @ ' + events[i].locationName + '</div>';
 			events[i].type = getFilterOption(events[i].type);
 			var type = '<p>' + events[i].type + '</p>';
 
@@ -87,7 +88,8 @@ function placeMarkers(events) {
 			var lengthOfTweet = events[i].detailPage.length + events[i].name.length + 25;
 			var twitterShare = '<button id="twitterButton"><a target="_blank" href="https://twitter.com/share?url=' + events[i].detailPage + '&text=Found this on HereSay - ' + events[i].name + '"</a>Tweet</button>';
 			//var content = '<div id="iw-container">' + title + '<div class="iw-content">' + '<p></p>' + date + type + fbShare + twitterShare + '</div>' + '<div class="iw-bottom-gradient"></div>' + '</div>';
-			var content = '<div id="iw-container">' + title + '<div class="iw-content">' + date + '<br/><p>' + fbShare + twitterShare + '</p></div></div>';
+			var date = '<div class="iw-subTitle">' + events[i].date + twitterShare + fbShare + '</div>';
+			var content = '<div id="iw-container">' + title + '<div class="iw-content">' + date + '<br/><span>' + events[i].locationName + '</span></div></div>';
 
 			var infowindow = new google.maps.InfoWindow({
 				content : content,
@@ -181,7 +183,7 @@ function returnMapState() {
 	if (appType == 'mobile')
 		return;
 
-	var centerLoc = new window.google.maps.LatLng(34.0416, -118.328661);
+	var centerLoc = new window.google.maps.LatLng(34.088712, -118.389514);
 	var centerMarker = new google.maps.Marker({
 		position : centerLoc,
 		map : map,
