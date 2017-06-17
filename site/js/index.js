@@ -25,11 +25,10 @@ var dateTypeEvents = [];
 var typeDateEvents = [];
 
 $(window).on('load', function() {
-	//var eventdir = '../data/crawldata/' + monthName + '/' + monthName + 'Events.json';
 	var eventdir = '../data/crawldata/june/juneEvents.json';
 	var locationdir = '../data/locationdata/' + monthName + 'LocationsGeo.json';
 	getJson(eventdir, locationdir);
-	setUpFilters();
+	// setUpFilters();
 });
 
 function getJson(eventdir, locationdir) {
@@ -65,10 +64,7 @@ function getJson(eventdir, locationdir) {
 		//locationData = [];
 		//eventData = [];
 
-		//if ($('html').width() <= 480)
-		//	appType = 'mobile';
-
-		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) || $('html').width() <= 640)
 			appType = 'mobile';
 
 		if (locationData.length && eventData.length) {
@@ -88,6 +84,7 @@ function afterDataLoaded() {
 	var browserHeight = $('html').height();
 
 	if (appType != 'mobile') {
+		setUpFilters();
 		var headerHeight = Math.ceil(browserHeight * .07);
 		var mapHeight = Math.ceil(browserHeight * .93);
 
@@ -102,22 +99,39 @@ function afterDataLoaded() {
 		$("#selectDate").val('1').trigger('change');
 		$("#selectType").val('2').trigger('change');
 	} else {
+		$('body').addClass('mobile');
 		$('#map_canvas').hide();
 
 		var headerHeight = Math.ceil(browserHeight * .07);
 		var sideBarHeight = Math.ceil(browserHeight * .93);
 
-		$('#header').height(headerHeight);
 		$('#sidebar').height(sideBarHeight);
 		$('#sidebar').width(browserWidth);
-		$('#dateFilter').height(headerHeight);
-		$('#dateFilter select').height(headerHeight - 2);
-		$('#typeFilter').height(headerHeight);
-		$('#typeFilter select').height(headerHeight - 2);
+		$('#header').hide();
 
-		$("#selectDate").val('1').trigger('change');
-		$("#selectType").val('2').trigger('change');
-		
+		var days = getDateFilterOptions();
+		var dateFilter = '<div id="dateFilter" class="scrollmenu">';
+		for (var i = 0; i < days.length; i++) {
+			dateFilter += '<a id="' + days[i].split(' ')[1] + '" href="#">' + days[i] + '</a>';
+		}
+
+		dateFilter += '</div>';
+		$('body').append(dateFilter);
+
+		//var types = ['Theater', 'Art', 'Food & Drink', 'Comedy', 'Music', 'Festivals', 'Sports', 'Dance', 'Family', 'Film & TV', 'Educational', 'Outdoors', 'Museum', 'Health', 'Holidays', 'Miscellaneous'];
+		var types = ['Theater', 'Art', 'Food & Drink', 'Comedy', 'Music', 'Festivals', 'Sports', 'Dance', 'Family', 'Film & TV', 'Museum', 'Miscellaneous'];
+
+		var typeFilter = '<div id="typeFilter" class="scrollmenu">';
+		for (var i = 0; i < types.length; i++) {
+			typeFilter += '<a id="' + types[i] + '" href="#">' + types[i] + '</a>';
+		}
+
+		typeFilter += '</div>';
+		$('body').append(typeFilter);
+		$('#sidebar h3').hide();
+		setUpFilters();
+		$('#typeFilter #Music').trigger("click");
+		$('#' + days[0].split(' ')[1]).trigger("click");
 	}
 }
 
