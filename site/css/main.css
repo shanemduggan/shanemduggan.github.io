@@ -290,7 +290,7 @@ a:hover, a:active {
 .mobile {
 	/*padding-bottom: 25px !important;*/
     background-image: none;
-
+	overflow-x: hidden;
 }
 
 .mobile:hover {
