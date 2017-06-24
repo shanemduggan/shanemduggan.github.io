@@ -279,6 +279,7 @@ a:hover, a:active {
 .mobile .scrollmenu a {
 	height: 100%;
 	min-width: 125px;
+	font-size: 1.4em;
 }
 
 .mobile {
