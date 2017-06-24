@@ -248,11 +248,27 @@ a:hover, a:active {
 }
 
 .mobile #dateFilter {
+	height: 5%;
 	
 }
 
 .mobile #typeFilter {
-	margin-top: 5%;
+	/*margin-top: 5%;*/
+	top: 5%;
+	height: 5%;
+}
+
+.mobile #dateFilter a  {
+	padding-top: 2.5%;
+}
+
+.mobile #typeFilter a  {
+	padding-top: 2.5%;
+}
+
+
+.mobile .scrollmenu a {
+	height: 100%;
 }
 
 .mobile {

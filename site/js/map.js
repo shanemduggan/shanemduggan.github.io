@@ -9,7 +9,8 @@ function initMap() {
 			lat : 34.088712,
 			lng : -118.389514
 		},
-		mapTypeControl : false
+		mapTypeControl : false,
+		clickableIcons: false
 	});
 
 	google.maps.event.addDomListener(window, "resize", function() {
