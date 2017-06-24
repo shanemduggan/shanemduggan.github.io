@@ -37,7 +37,7 @@ function setUpMobileFilters() {
 		}
 
 		if ($('#typeFilter a.activeItem').text() == 'All' && $('#dateFilter a.activeItem').text() == 'All') {
-			var title = 'Try selecting a date or event';
+			var title = 'Try selecting a date or type';
 		}
 
 		console.log(events);
@@ -80,7 +80,7 @@ function setUpMobileFilters() {
 		}
 
 		if ($('#typeFilter a.activeItem').text() == 'All' && $('#dateFilter a.activeItem').text() == 'All') {
-			var title = 'Try selecting a date or event';
+			var title = 'Try selecting a date or type';
 		}
 
 		console.log(events);
