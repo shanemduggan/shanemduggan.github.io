@@ -322,6 +322,7 @@ a:hover, a:active {
 	/*min-height: 180px;*/
 	/*min-height: 300px;*/
 	min-height: 260px;
+	-webkit-overflow-scrolling: touch;
 }
 
 .mobile ul li {
