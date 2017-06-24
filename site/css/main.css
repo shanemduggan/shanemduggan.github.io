@@ -248,27 +248,32 @@ a:hover, a:active {
 }
 
 .mobile #dateFilter {
-	height: 5%;
+	/*height: 5%;*/
+	height: 6.5%;
 }
 
 .mobile h3 {
-	margin-top: 11.5%; 
+	/*margin-top: 11.5%; */
+	margin-top: 17.5%;
 	font-size: 3em;
 	margin-bottom: 0px;
 }
 
 .mobile #typeFilter {
-	/*margin-top: 5%;*/
-	top: 5%;
-	height: 5%;
+	/*top: 5%;
+	height: 5%;*/
+	top: 6.5%;
+	height: 6.5%;
 }
 
 .mobile #dateFilter a  {
-	padding-top: 2.5%;
+	/*padding-top: 2.5%;*/
+	padding-top: 4%;
 }
 
 .mobile #typeFilter a  {
-	padding-top: 2.5%;
+	/*padding-top: 2.5%;*/
+	padding-top: 4%;
 }
 
 .mobile ul {
@@ -302,7 +307,6 @@ a:hover, a:active {
 }
 
 .mobile #sidebar {
-	/*margin-top: 5%;*/
 	margin-top: 10%;
 	background-color: #FFFFCC;
 }
@@ -316,34 +320,25 @@ a:hover, a:active {
 	padding-left: 1%;
 	border-bottom: 1px solid grey;
 	/*min-height: 180px;*/
-	min-height: 300px;
-	/*font-size: 2em;*/
+	/*min-height: 300px;*/
+	min-height: 260px;
 }
 
-.mobile ul a {
+.mobile ul li {
 	line-height: 1.8;
 }
 
-.mobile ul a .name {
+.mobile ul .name {
 	font-size: 3em;
 }
 
-.mobile ul a .eventDate {
+.mobile ul .eventDate {
 	font-size: 2.3em;
 }
 
-.mobile ul a .details {
+.mobile ul .details {
 	font-size: 2.6em;
 }
-
-.mobile .eventDate {
-	font-size: 12px;
-}
-
-.mobile .details {
-	font-size: 12px;
-}
-
 
 div.scrollmenu {
     background-color: #333;
@@ -360,14 +355,6 @@ div.scrollmenu a {
     padding: 14px;
     text-decoration: none;
 }
-
-/*div.scrollmenu a:hover {
-    background-color: #777;
-}*/
-
-/*div.scrollmenu a:hover, a:active {
-    background-color: #777;
-}*/
 
 .activeItem {
 	background-color: #777;
