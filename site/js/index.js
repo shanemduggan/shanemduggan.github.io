@@ -110,6 +110,7 @@ function afterDataLoaded() {
 		$('#header').hide();
 
 		var days = getDateFilterOptions();
+		days.unshift('All');
 		var dateFilter = '<div id="dateFilter" class="scrollmenu">';
 		for (var i = 0; i < days.length; i++) {
 			dateFilter += '<a id="' + days[i].split(' ')[1] + '" href="#">' + days[i] + '</a>';
@@ -119,7 +120,7 @@ function afterDataLoaded() {
 		$('body').append(dateFilter);
 
 		//var types = ['Theater', 'Art', 'Food & Drink', 'Comedy', 'Music', 'Festivals', 'Sports', 'Dance', 'Family', 'Film & TV', 'Educational', 'Outdoors', 'Museum', 'Health', 'Holidays', 'Miscellaneous'];
-		var types = ['Theater', 'Art', 'Food & Drink', 'Comedy', 'Music', 'Festivals', 'Sports', 'Dance', 'Family', 'Film & TV', 'Museum', 'Miscellaneous'];
+		var types = ['All', 'Theater', 'Art', 'Food & Drink', 'Comedy', 'Music', 'Festivals', 'Sports', 'Dance', 'Family', 'Film & TV', 'Museum', 'Miscellaneous'];
 
 		var typeFilter = '<div id="typeFilter" class="scrollmenu">';
 		for (var i = 0; i < types.length; i++) {
@@ -130,8 +131,8 @@ function afterDataLoaded() {
 		$('body').append(typeFilter);
 		$('#sidebar h3').hide();
 		setUpFilters();
-		$('#typeFilter #Music').trigger("click");
-		$('#' + days[0].split(' ')[1]).trigger("click");
+		$('#typeFilter #Art').trigger("click");
+		$('#' + days[1].split(' ')[1]).trigger("click");
 	}
 }
 
