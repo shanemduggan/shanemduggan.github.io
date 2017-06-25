@@ -254,7 +254,7 @@ a:hover, a:active {
 
 .mobile h3 {
 	/*margin-top: 11.5%; */
-	margin-top: 17.5%;
+	/*margin-top: 17.5%;*/
 	font-size: 3em;
 	margin-bottom: 0px;
 }
@@ -269,11 +269,13 @@ a:hover, a:active {
 .mobile #dateFilter a {
 	/*padding-top: 2.5%;*/
 	padding-top: 4%;
+	padding-bottom: 4%;
 }
 
 .mobile #typeFilter a {
 	/*padding-top: 2.5%;*/
 	padding-top: 4%;
+	padding-bottom: 4%;
 }
 
 .mobile ul {
@@ -281,9 +283,12 @@ a:hover, a:active {
 }
 
 .mobile .scrollmenu a {
-	height: 100%;
-	min-width: 125px;
+	/*height: 100%;*/
+	/*height: 6.5%;*/
+	/*min-width: 125px;*/
+	min-width: 175px;
 	font-size: 1.4em;
+	padding: 0px;
 }
 
 .mobile {
@@ -307,7 +312,7 @@ a:hover, a:active {
 }
 
 .mobile #sidebar {
-	margin-top: 10%;
+	/*margin-top: 10%;*/
 	background-color: #FFFFCC;
 	overflow: scroll;
 	-webkit-overflow-scrolling: touch;
@@ -346,9 +351,10 @@ a:hover, a:active {
 div.scrollmenu {
 	background-color: #333;
 	overflow: auto;
+	/*overflow-x: hidden;*/
 	white-space: nowrap;
 	width: 100%;
-	position: absolute;
+	/*position: absolute;*/
 }
 
 div.scrollmenu a {
