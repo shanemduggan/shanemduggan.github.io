@@ -257,14 +257,17 @@ function updateMobileSideBar(heading, sideBarEvents) {
 	$('#sidebar ul').html('');
 	$('#sidebar h3').remove();
 	$('#sidebar').prepend('<h3>' + heading + '</h3>');
-	$('#sidebar').animate({ scrollTop: 0 }, 125);
+	$('#sidebar').animate({
+		scrollTop : 0
+	}, 125);
 
 	sideBarEvents.forEach(function(e) {
 		var liFound = $("#sidebar ul li:contains('" + e.name + "')");
 		if (liFound.length)
 			return;
+		$('#sidebar ul').append('<li><a target="_blank" href="' + e.detailPage + '"><span class="name">' + e.name + '</span><br/><span class="eventDate">' + e.date + '</span><br/><span class="details">' + e.locationName + '<br/></span></a></li>');
 		//$('#sidebar ul').append('<li><span class="name">' + e.name + '</span><br/><span class="eventDate">' + e.date + '</span><br/><span class="details">' + e.locationName + '<br/></span></li>');
-		$('#sidebar ul').append('<li><a target="_blank" href="' + e.detailPage + '"><span class="name">' + e.name + '</span></a><br/><span class="eventDate">' + e.date + '</span><br/><span class="details">' + e.locationName + '<br/></span></li>');
+		//$('#sidebar ul').append('<li><a target="_blank" href="' + e.detailPage + '"><span class="name">' + e.name + '</span></a><br/><span class="eventDate">' + e.date + '</span><br/><span class="details">' + e.locationName + '<br/></span></li>');
 		//$('#sidebar ul').append('<li><span class="name">' + e.name + '</span><br/><span class="eventDate">' + e.date + '</span><br/><span class="details">' + e.locationName + '<br/></span></li>');
 		//$('#sidebar ul').append('<li><a target="_blank" href="' + e.detailPage + '"><span class="name">' + e.name + '</span></a></li>');
 	});
