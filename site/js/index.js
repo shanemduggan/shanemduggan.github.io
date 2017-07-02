@@ -25,7 +25,7 @@ var dateTypeEvents = [];
 var typeDateEvents = [];
 
 $(window).on('load', function() {
-	var eventdir = '../data/crawldata/june/juneEvents.json';
+	var eventdir = '../data/crawldata/' + monthName + '/' + monthName + 'Events.json';
 	var locationdir = '../data/locationdata/' + monthName + 'LocationsGeo.json';
 	getJson(eventdir, locationdir);
 	// setUpFilters();
