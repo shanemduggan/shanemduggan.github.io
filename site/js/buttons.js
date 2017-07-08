@@ -49,7 +49,7 @@ function setUpMobileFilters() {
 			onLoadClick = false;
 			return;
 		}
-		
+
 		$('#dateFilter a.activeItem').removeClass('activeItem');
 		console.log(this);
 		var date = $(this).text();
@@ -138,13 +138,22 @@ function setUpFilters() {
 			// filter cached date events by type
 
 			//console.log(cachedDateEvents);
-			for (var i = 0; i < cachedDateEvents.length; i++) {
-				if (cachedDateEvents[i].type && typeVal == getFilterOption(cachedDateEvents[i].type))
-					dateTypeEvents.push(cachedDateEvents[i]);
-			}
+			// for (var i = 0; i < cachedDateEvents.length; i++) {
+			// if (cachedDateEvents[i].type && typeVal == getFilterOption(cachedDateEvents[i].type))
+			// dateTypeEvents.push(cachedDateEvents[i]);
+			// }
 
-			placeMarkers(dateTypeEvents);
-			updateSideBar(typeVal + ' for ' + dateVal, dateTypeEvents);
+			var events = _.filter(eventData, function(e) {
+				e.type = getFilterOption(e.type);
+				if (e.type == typeVal && e.date == dateVal)
+					//return e.type == typeVal && e.date == dateVal;
+					return getLocation(e);
+			});
+
+			placeMarkers(events);
+			//placeMarkers(dateTypeEvents);
+			// updateSideBar(typeVal + ' for ' + dateVal, dateTypeEvents);
+			updateSideBar(typeVal + ' for ' + dateVal, events);
 		} else if (typeIndex == 0 && dateIndex != 0) {
 			if (cachedDateEvents.length) {
 				updateSideBar(dateVal, cachedDateEvents);
@@ -167,83 +176,96 @@ function setUpFilters() {
 	});
 
 	$('#dateFilter select').change(function(e) {
-		openCards.forEach(function(card) {
-			card.close();
-		});
+		if (onLoadClick == true) {
+			onLoadClick = false;
+		} else {
+			openCards.forEach(function(card) {
+				card.close();
+			});
 
-		cachedDateEvents = [];
-		typeDateEvents = [];
-		var dateIndex = $('#dateFilter select').val();
-		var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
-		var typeIndex = $('#typeFilter select').val();
-		var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
-		clearMarkers();
-		returnMapState();
-
-		// if date or type are not selected
-		if (dateIndex == 0 && typeIndex == 0) {
-			$('#sidebar ul').html('');
-			$('#sidebar h3').remove();
+			cachedDateEvents = [];
+			typeDateEvents = [];
+			var dateIndex = $('#dateFilter select').val();
+			var dateVal = $("#dateFilter select option[value='" + dateIndex + "']").text();
+			var typeIndex = $('#typeFilter select').val();
+			var typeVal = $("#typeFilter select option[value='" + typeIndex + "']").text();
 			clearMarkers();
-			return;
-		}
+			returnMapState();
 
-		// if date is changed, type not selected
-		if (dateIndex != 0 && typeIndex == 0) {
-			dateEvents = _.filter(eventData, function(e) {
-				return e.date == dateVal;
-			});
-
-			if (dateEvents.length && locationData.length) {
-				for (var i = 0; i < dateEvents.length; i++) {
-					// cache date filtered events for later use
-					cachedDateEvents.push(getLocation(dateEvents[i]));
-				}
+			// if date or type are not selected
+			if (dateIndex == 0 && typeIndex == 0) {
+				$('#sidebar ul').html('');
+				$('#sidebar h3').remove();
+				clearMarkers();
+				return;
 			}
 
-			updateSideBar(dateVal, cachedDateEvents);
-			placeMarkers(cachedDateEvents);
-		} else if (dateIndex != 0 && typeIndex != 0) {
-			// filter cached type events by date
-			//console.log(cachedTypeEvents);
+			// if date is changed, type not selected
+			if (dateIndex != 0 && typeIndex == 0) {
+				dateEvents = _.filter(eventData, function(e) {
+					return e.date == dateVal;
+				});
 
-			typeDateEvents = _.filter(cachedTypeEvents, function(e) {
-				return e.date == dateVal;
-			});
-			updateSideBar(typeVal + ' for ' + dateVal, typeDateEvents);
-			placeMarkers(typeDateEvents);
-		} else if (dateIndex == 0 && typeIndex != 0) {
-			// if cachedTypeEvents is empty
-			if (cachedTypeEvents.length) {
-				placeMarkers(cachedTypeEvents);
+				if (dateEvents.length && locationData.length) {
+					for (var i = 0; i < dateEvents.length; i++) {
+						// cache date filtered events for later use
+						cachedDateEvents.push(getLocation(dateEvents[i]));
+					}
+				}
+
+				updateSideBar(dateVal, cachedDateEvents);
+				placeMarkers(cachedDateEvents);
+			} else if (dateIndex != 0 && typeIndex != 0) {
+				// filter cached type events by date
+				//console.log(cachedTypeEvents);
+
+				typeDateEvents = _.filter(cachedTypeEvents, function(e) {
+					return e.date == dateVal;
+				});
+				updateSideBar(typeVal + ' for ' + dateVal, typeDateEvents);
+				placeMarkers(typeDateEvents);
+			} else if (dateIndex == 0 && typeIndex != 0) {
+				// if cachedTypeEvents is empty
+				if (cachedTypeEvents.length) {
+					placeMarkers(cachedTypeEvents);
+					updateSideBar(typeVal, cachedTypeEvents);
+				} else {
+					for (var i = 0; i < eventData.length; i++) {
+						if (eventData[i].type && typeVal == getFilterOption(eventData[i].type))
+							// cache type filtered events for later use
+							cachedTypeEvents.push(getLocation(eventData[i]));
+					}
+				}
 				updateSideBar(typeVal, cachedTypeEvents);
-			} else {
-				for (var i = 0; i < eventData.length; i++) {
-					if (eventData[i].type && typeVal == getFilterOption(eventData[i].type))
-						// cache type filtered events for later use
-						cachedTypeEvents.push(getLocation(eventData[i]));
-				}
+				placeMarkers(cachedTypeEvents);
 			}
-			updateSideBar(typeVal, cachedTypeEvents);
-			placeMarkers(cachedTypeEvents);
 		}
+
 	});
 }
 
 function updateSideBar(heading, sideBarEvents) {
+	var duplicatesFound = 0;
 	$('#sidebar ul').html('');
 	$('#sidebar h3').remove();
 	$('#sidebar').prepend('<h3>' + heading + '</h3>');
 	sideBarEvents.forEach(function(e) {
+		if (e.name.indexOf("'") != -1)
+			e.name = e.name.replace(/'/g, '');
 		var liFound = $("#sidebar ul li:contains('" + e.name + "')");
-		if (liFound.length)
+		if (liFound.length) {
+			duplicatesFound++;
 			return;
+		}
+
 		//$('#sidebar ul').append('<li><span class="name">' + e.name + '</span><span class="details">' + e.locationName + '<br><span class="eventDate">' + e.date + '</span></span></li>');
 		if (appType == 'mobile')
 			$('#sidebar ul').append('<li><a target="_blank" href="' + e.detailPage + '"><span class="name">' + e.name + '</span></a></li>');
 		else
 			$('#sidebar ul').append('<li><span class="name">' + e.name + '</span></li>');
 	});
+
+	//console.log('doops found -' + duplicatesFound);
 
 	if (appType == 'mobile')
 		return;
@@ -267,6 +289,8 @@ function updateMobileSideBar(heading, sideBarEvents) {
 	}, 125);
 
 	sideBarEvents.forEach(function(e) {
+		if (e.name.indexOf("'") != -1)
+			e.name = e.name.replace(/'/g, '');
 		var liFound = $("#sidebar ul li:contains('" + e.name + "')");
 		if (liFound.length)
 			return;

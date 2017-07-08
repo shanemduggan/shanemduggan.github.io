@@ -146,7 +146,7 @@ function afterDataLoaded() {
 }
 
 function showCard(ele, action) {
-	console.log(map.getCenter());
+	//console.log(map.getCenter());
 	var name = $(ele).text();
 	if (name) {
 		var marker = markers[name];
