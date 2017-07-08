@@ -45,11 +45,6 @@ function setUpMobileFilters() {
 	});
 
 	$('#dateFilter a').click(function() {
-		if (onLoadClick == true) {
-			onLoadClick = false;
-			return;
-		}
-		
 		$('#dateFilter a.activeItem').removeClass('activeItem');
 		console.log(this);
 		var date = $(this).text();

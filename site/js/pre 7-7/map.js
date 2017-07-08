@@ -10,7 +10,7 @@ function initMap() {
 			lng : -118.389514
 		},
 		mapTypeControl : false,
-		clickableIcons : false
+		clickableIcons: false
 	});
 
 	google.maps.event.addDomListener(window, "resize", function() {
@@ -28,20 +28,6 @@ function initMap() {
 		visible : false,
 		position : centerCoords
 	});
-
-	afterMapInit();
-}
-
-function afterMapInit() {
-	if (appType != 'mobile') {
-		$("#selectDate").val('1').trigger('change');
-		$("#selectType").val('2').trigger('change');
-	} else {
-		var days = getDateFilterOptions();
-		days.unshift('All');
-		$('#' + days[1].split(' ')[1]).trigger("click");
-		$('#typeFilter #Art').trigger("click");
-	}
 }
 
 function placeMarkers(events) {
@@ -88,7 +74,8 @@ function placeMarkers(events) {
 			});
 
 			if (events[i].name.length > 50) {
-				var fullName = events[i].name; events[i].name.replace(/^(.{50}[^\s]*).*/, "$1") + "\n";
+				var fullName = events[i].name;
+				events[i].name.replace(/^(.{50}[^\s]*).*/, "$1") + "\n";
 				var title = '<div class="iw-title" title="' + fullName + '"><a target="_blank" href="' + events[i].detailPage + '">' + events[i].name + '</a></div>';
 			} else
 				var title = '<div class="iw-title"><a target="_blank" href="' + events[i].detailPage + '">' + events[i].name + '</a></div>';

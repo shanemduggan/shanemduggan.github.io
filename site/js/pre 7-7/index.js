@@ -8,7 +8,6 @@ var historicLocData = [];
 var openCards = [];
 var appType = '';
 var centerMarker;
-var onLoadClick = true;
 
 var currentMonth = new Date().getMonth() + 1;
 var monthName = getMonthName(currentMonth);
@@ -33,11 +32,6 @@ $(window).on('load', function() {
 });
 
 function getJson(eventdir, locationdir) {
-	afterDataLoaded();
-
-	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) || $('html').width() <= 640)
-		appType = 'mobile';
-
 	$.getJSON(locationdir, function(data) {
 		if (data.length) {
 			console.log('# of locations: ' + data.length);
@@ -45,12 +39,12 @@ function getJson(eventdir, locationdir) {
 		}
 	});
 
-	// $.getJSON('../data/locationdata/allLocationsGeo.json', function(data) {
-	// if (data.length) {
-	// console.log('# of historic locations: ' + data.length);
-	// historicLocData = data;
-	// }
-	// });
+	$.getJSON('../data/locationdata/allLocationsGeo.json', function(data) {
+		if (data.length) {
+			console.log('# of historic locations: ' + data.length);
+			historicLocData = data;
+		}
+	});
 
 	$.getJSON(eventdir, function(data) {
 		var filteredData = [];
@@ -70,10 +64,13 @@ function getJson(eventdir, locationdir) {
 		//locationData = [];
 		//eventData = [];
 
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) || $('html').width() <= 640)
+			appType = 'mobile';
+
 		if (locationData.length && eventData.length) {
 			if (appType != 'mobile')
 				initMap();
-			//afterDataLoaded();
+			afterDataLoaded();
 		} else {
 			$('#wrapper').hide();
 			$('#sorryMessage').show();
@@ -89,8 +86,7 @@ function afterDataLoaded() {
 	if (appType != 'mobile') {
 		setUpFilters();
 		var headerHeight = Math.ceil(browserHeight * .07);
-		//var mapHeight = Math.ceil(browserHeight * .93);
-		var mapHeight = Math.ceil(browserHeight * .96);
+		var mapHeight = Math.ceil(browserHeight * .93);
 
 		$('#header').height(headerHeight);
 		$('#dateFilter').height(headerHeight);
@@ -100,8 +96,8 @@ function afterDataLoaded() {
 		$('#map_canvas').height(mapHeight);
 		$('#sidebar').height(mapHeight);
 
-		//$("#selectDate").val('1').trigger('change');
-		//$("#selectType").val('2').trigger('change');
+		$("#selectDate").val('1').trigger('change');
+		$("#selectType").val('2').trigger('change');
 	} else {
 		$('body').addClass('mobile');
 		$('#map_canvas').hide();
@@ -137,11 +133,11 @@ function afterDataLoaded() {
 		$('body').prepend(dateFilter);
 
 		$('#sidebar h3').hide();
-
+		
 		// do we need this?
 		setUpFilters();
-		//$('#typeFilter #Art').trigger("click");
-		//$('#' + days[1].split(' ')[1]).trigger("click");
+		$('#typeFilter #Art').trigger("click");
+		$('#' + days[1].split(' ')[1]).trigger("click");
 	}
 }
 
