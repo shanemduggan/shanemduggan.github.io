@@ -33,10 +33,11 @@ $(window).on('load', function() {
 });
 
 function getJson(eventdir, locationdir) {
-	afterDataLoaded();
 
 	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) || $('html').width() <= 640)
 		appType = 'mobile';
+
+	afterDataLoaded();
 
 	$.getJSON(locationdir, function(data) {
 		if (data.length) {
@@ -73,6 +74,8 @@ function getJson(eventdir, locationdir) {
 		if (locationData.length && eventData.length) {
 			if (appType != 'mobile')
 				initMap();
+			else
+				triggerMobileFilters();
 			//afterDataLoaded();
 		} else {
 			$('#wrapper').hide();
@@ -80,6 +83,13 @@ function getJson(eventdir, locationdir) {
 		}
 	});
 
+}
+
+function triggerMobileFilters() {
+	var days = getDateFilterOptions();
+	days.unshift('All');
+	$('#' + days[1].split(' ')[1]).trigger("click");
+	$('#typeFilter #Art').trigger("click");
 }
 
 function afterDataLoaded() {

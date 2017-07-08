@@ -36,11 +36,6 @@ function afterMapInit() {
 	if (appType != 'mobile') {
 		$("#selectDate").val('1').trigger('change');
 		$("#selectType").val('2').trigger('change');
-	} else {
-		var days = getDateFilterOptions();
-		days.unshift('All');
-		$('#' + days[1].split(' ')[1]).trigger("click");
-		$('#typeFilter #Art').trigger("click");
 	}
 }
 

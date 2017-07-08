@@ -45,15 +45,15 @@ function setUpMobileFilters() {
 	});
 
 	$('#dateFilter a').click(function() {
-		if (onLoadClick == true) {
-			onLoadClick = false;
-			return;
-		}
-
 		$('#dateFilter a.activeItem').removeClass('activeItem');
 		console.log(this);
 		var date = $(this).text();
 		$(this).addClass('activeItem');
+
+		if (onLoadClick == true) {
+			onLoadClick = false;
+			return;
+		}
 
 		if ($('#typeFilter a.activeItem').length == 0) {
 			var title = date;
