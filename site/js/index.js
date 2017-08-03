@@ -46,12 +46,12 @@ function getJson(eventdir, locationdir) {
 		}
 	});
 
-	// $.getJSON('../data/locationdata/allLocationsGeo.json', function(data) {
-	// if (data.length) {
-	// console.log('# of historic locations: ' + data.length);
-	// historicLocData = data;
-	// }
-	// });
+	$.getJSON('../data/locationdata/allLocationsGeo.json', function(data) {
+		if (data.length) {
+			console.log('# of historic locations: ' + data.length);
+			historicLocData = data;
+		}
+	});
 
 	$.getJSON(eventdir, function(data) {
 		var filteredData = [];
