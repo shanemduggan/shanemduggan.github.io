@@ -39,7 +39,8 @@ function getJson(eventdir, locationdir) {
 
 	afterDataLoaded();
 
-	$.getJSON(locationdir, function(data) {
+	//$.getJSON(locationdir, function(data) {
+	$.getJSON('../data/locationdata/octoberLocations.geo', function(data) {
 		if (data.length) {
 			console.log('# of locations: ' + data.length);
 			locationData = data;
