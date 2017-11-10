@@ -63,8 +63,10 @@ function getJson(eventdir, locationdir) {
 					data[i].date = data[i].date.split('-')[0];
 				}
 
-				if (parseInt(data[i].date.match(/\d+/)[0]) >= new Date().getDate())
-					eventData.push(data[i]);
+				if (data[i].date && data[i].date.match(/\d+/).length) {
+					if (parseInt(data[i].date.match(/\d+/)[0]) >= new Date().getDate())
+						eventData.push(data[i]);
+				}
 			}
 		}
 
